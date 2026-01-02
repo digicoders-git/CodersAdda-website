@@ -15,7 +15,7 @@ import {
   Globe,
   Clock
 } from 'lucide-react';
-import aboutAppImg from '../assets/about_app_overview.png';
+import aboutAppImg from '../assets/about_app_mobile.png';
 
 const AboutApp = () => {
   const { colors } = useTheme();
@@ -89,7 +89,7 @@ const AboutApp = () => {
           <div className="flex-1 flex justify-center">
             <div className="relative group">
                <div className="absolute -inset-4 rounded-[40px] blur-2xl opacity-20 transition-all group-hover:opacity-40" style={{ backgroundColor: colors.primary }}></div>
-               <img src={aboutAppImg} alt="App Overview" className="w-full max-w-[450px] relative z-10 rounded-[35px] shadow-2xl transition-transform duration-500 group-hover:scale-105" />
+               <img src={aboutAppImg} alt="App Overview" className="w-1/4 w-full max-w-[450px] relative z-10 rounded-[35px] shadow-2xl transition-transform duration-500 group-hover:scale-105" />
             </div>
           </div>
         </div>

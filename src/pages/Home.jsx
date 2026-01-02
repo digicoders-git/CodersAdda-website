@@ -224,12 +224,12 @@ const Home = () => {
               <div>
                 <h3 className="text-xl font-bold mb-2" style={{ color: colors.textPrimary }}>{course.title}</h3>
                 <p className="text-xs leading-relaxed mb-4 opacity-60" style={{ color: colors.textSecondary }}>{course.desc}</p>
-                <NavLink to='/download'
+                {/* <NavLink to='/download'
                   className="px-6 py-2 rounded-lg font-bold text-sm bg-transparent border-2 border-primary transition-all hover:bg-red-50"
                   style={{ borderColor: colors.primary, color: colors.primary }}
                 >
                   Download
-                </NavLink>
+                </NavLink> */}
               </div>
             </div>
           ))}
@@ -256,12 +256,12 @@ const Home = () => {
           <p className="text-sm leading-relaxed mb-10 max-w-[450px]" style={{ color: colors.textSecondary }}>
             Relation so in confined smallest children unpacked delicate. Why sir end believe uncivil respect. Always get adieus nature day course for common.
           </p>
-          <button 
+          {/* <button 
             className="px-10 py-4 rounded-xl font-bold text-white shadow-xl transition-all hover:-translate-y-1"
             style={{ backgroundColor: colors.primary }}
           >
             View More
-          </button>
+          </button> */}
         </div>
         <div className="flex-1 flex flex-col gap-8 relative">
            {testimonials.map((test, idx) => (
