@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import Lottie from 'lottie-react';
+import softwareAnimation from '../animtedSVG/Software.json';
 import { 
   Smartphone, BookOpen, Users, Target, Video, FileText, Briefcase, 
   PlayCircle, Crown, TrendingUp, CheckCircle, Download, Sparkles,
   Award, Globe, Clock, Zap, ArrowRight, Shield, Star, Layers
 } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
-import img4 from '../assets/new/img4.png'
 
 const AboutApp = () => {
   const { colors } = useTheme();
@@ -133,7 +134,7 @@ const AboutApp = () => {
       {/* <Navbar /> */}
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto pt-10 pb-20">
+      <section className="relative overflow-hidden px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto pt-8 pb-12">
         {/* Background Elements */}
         <div className="absolute inset-0 z-0">
           <div 
@@ -146,10 +147,10 @@ const AboutApp = () => {
           ></div>
         </div>
 
-        <div className="relative z-10 flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
+        <div className="relative z-10 flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
           <div className="flex-1">
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6"
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-4"
               style={{ 
                 backgroundColor: `${colors.primary}15`,
                 border: `1px solid ${colors.primary}30`
@@ -162,7 +163,7 @@ const AboutApp = () => {
             </div>
 
             {/* Main Heading */}
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 leading-tight">
               <span style={{ color: colors.textPrimary }}>About the</span>
               <br />
               <span 
@@ -174,39 +175,39 @@ const AboutApp = () => {
             </h1>
 
             {/* Description */}
-            <p className="text-lg lg:text-xl leading-relaxed mb-8 opacity-80 max-w-2xl"
+            <p className="text-base lg:text-lg leading-relaxed mb-6 opacity-80 max-w-xl"
               style={{ color: colors.textSecondary }}>
               A modern education platform designed to help students, developers, and working professionals 
-              upskill through structured learning and practical knowledge aligned with current industry requirements.
+              upskill through structured learning and practical knowledge.
             </p>
 
             {/* Stats */}
-            <div className="flex flex-wrap gap-6 mb-10">
-              <div className="flex items-center gap-3">
+            <div className="flex flex-wrap gap-4 mb-6">
+              <div className="flex items-center gap-2">
                 <div className="p-2 rounded-lg" style={{ backgroundColor: `${colors.primary}10` }}>
-                  <Users size={20} style={{ color: colors.primary }} />
+                  <Users size={18} style={{ color: colors.primary }} />
                 </div>
                 <div>
-                  <div className="text-xl font-bold" style={{ color: colors.textPrimary }}>50K+</div>
-                  <div className="text-sm opacity-70" style={{ color: colors.textSecondary }}>Active Learners</div>
+                  <div className="text-lg font-bold" style={{ color: colors.textPrimary }}>50K+</div>
+                  <div className="text-xs opacity-70" style={{ color: colors.textSecondary }}>Active Learners</div>
                 </div>
               </div>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
                 <div className="p-2 rounded-lg" style={{ backgroundColor: `${colors.primary}10` }}>
-                  <BookOpen size={20} style={{ color: colors.primary }} />
+                  <BookOpen size={18} style={{ color: colors.primary }} />
                 </div>
                 <div>
-                  <div className="text-xl font-bold" style={{ color: colors.textPrimary }}>300+</div>
-                  <div className="text-sm opacity-70" style={{ color: colors.textSecondary }}>Courses</div>
+                  <div className="text-lg font-bold" style={{ color: colors.textPrimary }}>300+</div>
+                  <div className="text-xs opacity-70" style={{ color: colors.textSecondary }}>Courses</div>
                 </div>
               </div>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
                 <div className="p-2 rounded-lg" style={{ backgroundColor: `${colors.primary}10` }}>
-                  <Award size={20} style={{ color: colors.primary }} />
+                  <Award size={18} style={{ color: colors.primary }} />
                 </div>
                 <div>
-                  <div className="text-xl font-bold" style={{ color: colors.textPrimary }}>95%</div>
-                  <div className="text-sm opacity-70" style={{ color: colors.textSecondary }}>Success Rate</div>
+                  <div className="text-lg font-bold" style={{ color: colors.textPrimary }}>95%</div>
+                  <div className="text-xs opacity-70" style={{ color: colors.textSecondary }}>Success Rate</div>
                 </div>
               </div>
             </div>
@@ -214,20 +215,20 @@ const AboutApp = () => {
             {/* CTA */}
             <NavLink 
               to="/download"
-              className="group inline-flex items-center gap-3 px-8 py-4 rounded-xl font-semibold text-lg 
+              className="group inline-flex items-center gap-3 px-6 py-3 rounded-xl font-semibold 
                        transition-all duration-300 hover:scale-105 hover:shadow-xl active:scale-95"
               style={{ 
                 background: `linear-gradient(135deg, ${colors.primary}, ${colors.secondary})`,
                 color: colors.white
               }}
             >
-              <Download size={20} />
+              <Download size={18} />
               Download App
-              <ArrowRight size={20} className="transition-transform duration-300 group-hover:translate-x-2" />
+              <ArrowRight size={18} className="transition-transform duration-300 group-hover:translate-x-2" />
             </NavLink>
           </div>
 
-          {/* Hero Image */}
+          {/* Hero Animation */}
           <div className="flex-1 relative">
             <div className="relative"
               style={{
@@ -235,52 +236,45 @@ const AboutApp = () => {
                 transition: 'transform 0.3s ease-out'
               }}
             >
-              <div className="relative mx-auto max-w-lg">
-                {/* Main Image Container */}
-                <div className="relative overflow-hidden rounded-3xl"
-                  style={{
-                    background: `linear-gradient(135deg, ${colors.primary}10, ${colors.secondary}10)`,
-                    padding: '20px'
-                  }}
-                >
-                  <img 
-                    src={img4} 
-                    alt="Coders App Interface" 
-                    className="w-full h-auto object-contain transition-transform duration-700 hover:scale-105"
-                    style={{
-                      filter: 'drop-shadow(0 25px 50px rgba(0,0,0,0.15))',
-                      maxHeight: '500px'
-                    }}
+              <div className="relative mx-auto max-w-sm lg:max-w-md">
+                {/* Main Animation Container */}
+                <div className="relative overflow-hidden rounded-2xl shadow-xl">
+                  <Lottie 
+                    animationData={softwareAnimation}
+                    loop={true}
+                    autoplay={true}
+                    className="w-full h-auto"
+                    style={{ maxHeight: '350px' }}
                   />
                 </div>
                 
                 {/* Floating Elements */}
-                <div className="absolute -top-4 -left-4 w-16 h-16 rounded-2xl flex items-center justify-center animate-float"
+                <div className="absolute -top-3 -left-3 w-12 h-12 rounded-xl flex items-center justify-center animate-float"
                   style={{ 
                     backgroundColor: colors.white,
-                    boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
+                    boxShadow: '0 8px 20px rgba(0,0,0,0.1)',
                     animationDelay: '0.2s'
                   }}
                 >
-                  <BookOpen size={24} style={{ color: colors.primary }} />
+                  <BookOpen size={18} style={{ color: colors.primary }} />
                 </div>
-                <div className="absolute -bottom-4 -right-4 w-16 h-16 rounded-2xl flex items-center justify-center animate-float"
+                <div className="absolute -bottom-3 -right-3 w-12 h-12 rounded-xl flex items-center justify-center animate-float"
                   style={{ 
                     backgroundColor: colors.white,
-                    boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
+                    boxShadow: '0 8px 20px rgba(0,0,0,0.1)',
                     animationDelay: '0.8s'
                   }}
                 >
-                  <Video size={24} style={{ color: colors.secondary }} />
+                  <Video size={18} style={{ color: colors.secondary }} />
                 </div>
-                <div className="absolute top-1/2 -left-8 w-12 h-12 rounded-xl flex items-center justify-center animate-float"
+                <div className="absolute top-1/2 -left-6 w-10 h-10 rounded-lg flex items-center justify-center animate-float"
                   style={{ 
                     backgroundColor: colors.white,
-                    boxShadow: '0 8px 25px rgba(0,0,0,0.1)',
+                    boxShadow: '0 6px 15px rgba(0,0,0,0.1)',
                     animationDelay: '1.2s'
                   }}
                 >
-                  <Target size={20} style={{ color: colors.primary }} />
+                  <Target size={16} style={{ color: colors.primary }} />
                 </div>
               </div>
             </div>

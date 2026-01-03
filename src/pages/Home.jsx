@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useMemo, memo, useCallback } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 import 'swiper/css';
@@ -138,16 +138,220 @@ const blogs = [
   { title: 'Complete Web Development Roadmap 2024', desc: 'Step-by-step guide to becoming a full-stack developer with the latest technologies and frameworks.', img: blogWebdev, date: 'Mar 5, 2024', readTime: '10 min' },
 ];
 
+const StatsCard = memo(({ stat, colors }) => (
+  <div 
+    className="group relative p-6 rounded-2xl backdrop-blur-sm transition-all duration-300 hover:scale-105 cursor-pointer will-change-transform"
+    style={{
+      background: 'rgba(255, 255, 255, 0.9)',
+      border: `1px solid ${colors.border}20`,
+      boxShadow: '0 8px 32px rgba(0, 0, 0, 0.08)'
+    }}
+  >
+    <div className="flex items-center gap-4">
+      <div className="p-3 rounded-xl transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12"
+        style={{ backgroundColor: `${colors.primary}10` }}
+      >
+        <div style={{ color: colors.primary }}>
+          {stat.icon}
+        </div>
+      </div>
+      <div>
+        <h3 className="text-2xl lg:text-3xl font-bold mb-1" style={{ color: colors.primary }}>
+          {stat.value}
+        </h3>
+        <p className="text-sm font-medium opacity-80" style={{ color: colors.textSecondary }}>
+          {stat.label}
+        </p>
+      </div>
+    </div>
+  </div>
+));
+
+const CourseCard = memo(({ course, colors }) => (
+  <div className="group relative h-full rounded-3xl overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-2xl will-change-transform"
+    style={{ 
+      backgroundColor: 'rgba(255, 255, 255, 0.9)',
+      backdropFilter: 'blur(10px)',
+      border: `1px solid ${colors.border}20`,
+    }}
+  >
+    <div className="p-6">
+      <div className="flex justify-between items-start mb-6">
+        <div className="p-3 rounded-xl transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12"
+          style={{ backgroundColor: `${colors.primary}10` }}
+        >
+          <img src={course.icon} alt={course.title} className="w-10 h-10 object-contain" loading="lazy" />
+        </div>
+        <div className="flex items-center gap-2 px-3 py-1 rounded-full text-sm font-semibold"
+          style={{ backgroundColor: `${course.level === 'Beginner' ? '#10B981' : course.level === 'Intermediate' ? '#F59E0B' : '#EF4444'}20`, color: course.level === 'Beginner' ? '#10B981' : course.level === 'Intermediate' ? '#F59E0B' : '#EF4444' }}
+        >
+          {course.level}
+        </div>
+      </div>
+      
+      <div className="mb-6">
+        <span className="text-sm font-semibold tracking-wider uppercase opacity-60 block mb-2" style={{ color: colors.textSecondary }}>
+          {course.category}
+        </span>
+        <h3 className="text-xl font-bold mb-3" style={{ color: colors.textPrimary }}>{course.title}</h3>
+        
+        <div className="flex items-center gap-4 mb-4">
+          <div className="flex items-center gap-1">
+            {[...Array(5)].map((_, i) => (
+              <Star key={i} size={14} fill={i < Math.floor(course.rating) ? colors.primary : 'none'} style={{ color: colors.primary }} />
+            ))}
+            <span className="text-sm font-semibold ml-1" style={{ color: colors.textPrimary }}>{course.rating}</span>
+          </div>
+          <div className="flex items-center gap-1 text-sm opacity-60" style={{ color: colors.textSecondary }}>
+            <Clock size={14} />
+            <span>{course.duration}</span>
+          </div>
+        </div>
+      </div>
+      
+      <div className="mb-6">
+        <div className="flex justify-between items-center mb-2">
+          <span className="text-sm font-semibold" style={{ color: colors.textPrimary }}>Progress</span>
+          <span className="text-sm font-bold" style={{ color: colors.primary }}>{course.progress}%</span>
+        </div>
+        <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+          <div className="h-full transition-all duration-1000 rounded-full" style={{ width: `${course.progress}%`, backgroundColor: colors.primary }}></div>
+        </div>
+      </div>
+      
+      <div className="flex items-center justify-between pt-6 border-t" style={{ borderColor: `${colors.border}30` }}>
+        <div className="flex items-center gap-3">
+          <img src={course.authorImg} alt={course.author} className="w-10 h-10 rounded-full border-2 border-white shadow-sm object-cover" loading="lazy" />
+          <div>
+            <span className="text-xs opacity-60 block" style={{ color: colors.textSecondary }}>Instructor</span>
+            <span className="text-sm font-semibold" style={{ color: colors.textPrimary }}>{course.author}</span>
+          </div>
+        </div>
+        <button className="p-2 rounded-full transition-all hover:scale-110"
+          style={{ backgroundColor: `${colors.primary}10` }}
+        >
+          <Play size={16} style={{ color: colors.primary }} />
+        </button>
+      </div>
+    </div>
+  </div>
+));
+
+const CategoryCard = memo(({ cat, colors }) => (
+  <div 
+    className="group relative p-8 rounded-3xl transition-all duration-500 hover:scale-105 hover:shadow-2xl cursor-pointer will-change-transform"
+    style={{ 
+      backgroundColor: 'rgba(255, 255, 255, 0.9)',
+      backdropFilter: 'blur(10px)',
+      border: `1px solid ${colors.border}20`,
+    }}
+  >
+    <div className="flex items-start justify-between mb-6">
+      <div className="p-4 rounded-2xl transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12"
+        style={{ backgroundColor: `${colors.primary}10` }}
+      >
+        <img src={cat.icon} alt={cat.title} className="w-12 h-12 object-contain" loading="lazy" />
+      </div>
+      <div className="text-right">
+        <div className="text-2xl font-bold" style={{ color: colors.primary }}>{cat.courses}</div>
+        <div className="text-sm opacity-60" style={{ color: colors.textSecondary }}>Courses</div>
+      </div>
+    </div>
+    
+    <h3 className="text-xl font-bold mb-3" style={{ color: colors.textPrimary }}>{cat.title}</h3>
+    <p className="text-sm leading-relaxed mb-6 opacity-80" style={{ color: colors.textSecondary }}>{cat.desc}</p>
+    
+    <div className="flex items-center justify-between pt-6 border-t" style={{ borderColor: `${colors.border}30` }}>
+      <div className="flex items-center gap-2 text-sm">
+        <Users size={16} className="opacity-60" />
+        <span className="font-semibold" style={{ color: colors.textPrimary }}>{cat.students}</span>
+        <span className="opacity-60" style={{ color: colors.textSecondary }}>students</span>
+      </div>
+    </div>
+  </div>
+));
+
+const PopularCourseCard = memo(({ course, colors }) => (
+  <div 
+    className="group relative p-8 rounded-3xl transition-all duration-500 hover:scale-105 hover:shadow-2xl cursor-pointer will-change-transform"
+    style={{ 
+      backgroundColor: 'rgba(255, 255, 255, 0.9)',
+      backdropFilter: 'blur(10px)',
+      border: `1px solid ${colors.border}20`,
+    }}
+  >
+    <div className="flex items-start gap-6">
+      <div className="p-5 rounded-2xl transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12"
+        style={{ backgroundColor: `${colors.primary}10` }}
+      >
+        <img src={course.icon} alt={course.title} className="w-16 h-16 object-contain" loading="lazy" />
+      </div>
+      <div className="flex-1">
+        <div className="flex justify-between items-start mb-3">
+          <h3 className="text-xl font-bold" style={{ color: colors.textPrimary }}>{course.title}</h3>
+          <div className="text-lg font-bold" style={{ color: colors.primary }}>{course.price}</div>
+        </div>
+        <p className="text-sm leading-relaxed mb-6 opacity-80" style={{ color: colors.textSecondary }}>{course.desc}</p>
+        
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-1">
+              <Star size={16} fill={colors.primary} style={{ color: colors.primary }} />
+              <span className="text-sm font-semibold" style={{ color: colors.textPrimary }}>{course.rating}/5</span>
+            </div>
+            <div className="flex items-center gap-1 text-sm opacity-70" style={{ color: colors.textSecondary }}>
+              <Clock size={16} />
+              <span>{course.duration}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+));
+
+const BlogCard = memo(({ blog, colors }) => (
+  <div 
+    className="group relative rounded-3xl overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-2xl will-change-transform"
+    style={{ 
+      backgroundColor: 'rgba(255, 255, 255, 0.9)',
+      backdropFilter: 'blur(10px)',
+      border: `1px solid ${colors.border}20`,
+    }}
+  >
+    <div className="overflow-hidden h-64">
+      <img 
+        src={blog.img} 
+        alt={blog.title} 
+        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+        loading="lazy"
+      />
+    </div>
+    <div className="p-6">
+      <div className="flex items-center gap-4 text-sm opacity-60 mb-4" style={{ color: colors.textSecondary }}>
+        <span>{blog.date}</span>
+        <span>•</span>
+        <span>{blog.readTime} read</span>
+      </div>
+      <h3 className="text-xl font-bold mb-4" style={{ color: colors.textPrimary }}>{blog.title}</h3>
+      <p className="text-sm leading-relaxed mb-6 opacity-80" style={{ color: colors.textSecondary }}>{blog.desc}</p>
+    </div>
+  </div>
+));
+
 const Home = () => {
   const { colors } = useTheme();
   const swiperRef = useRef(null);
 
-  const stats = [
+  const stats = useMemo(() => [
     { value: '50K+', label: 'Active Learners', icon: <Users size={24} /> },
     { value: '500+', label: 'Expert Mentors', icon: <GraduationCap size={24} /> },
     { value: '95%', label: 'Success Rate', icon: <TrendingUp size={24} /> },
     { value: '4.9', label: 'Average Rating', icon: <Star size={24} /> },
-  ];
+  ], []);
+
+  const handlePrev = useCallback(() => swiperRef.current?.slidePrev(), []);
+  const handleNext = useCallback(() => swiperRef.current?.slideNext(), []);
 
   return (
     <div className="w-full min-h-screen overflow-x-hidden relative">
@@ -160,37 +364,10 @@ const Home = () => {
         <Header />
       </div>
 
-      {/* Stats Banner */}
       <div className="relative z-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto -mt-25 mb-10">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {stats.map((stat, idx) => (
-            <div 
-              key={idx}
-              className="group relative p-6 rounded-2xl backdrop-blur-sm transition-all duration-300 hover:scale-105 cursor-pointer"
-              style={{
-                background: 'rgba(255, 255, 255, 0.9)',
-                border: `1px solid ${colors.border}20`,
-                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.08)'
-              }}
-            >
-              <div className="flex items-center gap-4">
-                <div className="p-3 rounded-xl transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12"
-                  style={{ backgroundColor: `${colors.primary}10` }}
-                >
-                  <div style={{ color: colors.primary }}>
-                    {stat.icon}
-                  </div>
-                </div>
-                <div>
-                  <h3 className="text-2xl lg:text-3xl font-bold mb-1" style={{ color: colors.primary }}>
-                    {stat.value}
-                  </h3>
-                  <p className="text-sm font-medium opacity-80" style={{ color: colors.textSecondary }}>
-                    {stat.label}
-                  </p>
-                </div>
-              </div>
-            </div>
+            <StatsCard key={idx} stat={stat} colors={colors} />
           ))}
         </div>
       </div>
@@ -228,14 +405,14 @@ const Home = () => {
             <button 
               className="p-3 rounded-full transition-all hover:scale-110 hover:shadow-lg"
               style={{ backgroundColor: `${colors.primary}10` }}
-              onClick={() => swiperRef.current?.slidePrev()}
+              onClick={handlePrev}
             >
               <ChevronRight size={24} className="rotate-180" style={{ color: colors.primary }} />
             </button>
             <button 
               className="p-3 rounded-full transition-all hover:scale-110 hover:shadow-lg"
               style={{ backgroundColor: `${colors.primary}10` }}
-              onClick={() => swiperRef.current?.slideNext()}
+              onClick={handleNext}
             >
               <ChevronRight size={24} style={{ color: colors.primary }} />
             </button>
@@ -258,76 +435,7 @@ const Home = () => {
         >
           {yourCourses.map((course, index) => (
             <SwiperSlide key={index}>
-              <div className="group relative h-full rounded-3xl overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-2xl"
-                style={{ 
-                  backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                  backdropFilter: 'blur(10px)',
-                  border: `1px solid ${colors.border}20`,
-                }}
-              >
-                {/* Course header */}
-                <div className="p-6">
-                  <div className="flex justify-between items-start mb-6">
-                    <div className="p-3 rounded-xl transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12"
-                      style={{ backgroundColor: `${colors.primary}10` }}
-                    >
-                      <img src={course.icon} alt={course.title} className="w-10 h-10 object-contain" />
-                    </div>
-                    <div className="flex items-center gap-2 px-3 py-1 rounded-full text-sm font-semibold"
-                      style={{ backgroundColor: `${course.level === 'Beginner' ? '#10B981' : course.level === 'Intermediate' ? '#F59E0B' : '#EF4444'}20`, color: course.level === 'Beginner' ? '#10B981' : course.level === 'Intermediate' ? '#F59E0B' : '#EF4444' }}
-                    >
-                      {course.level}
-                    </div>
-                  </div>
-                  
-                  <div className="mb-6">
-                    <span className="text-sm font-semibold tracking-wider uppercase opacity-60 block mb-2" style={{ color: colors.textSecondary }}>
-                      {course.category}
-                    </span>
-                    <h3 className="text-xl font-bold mb-3" style={{ color: colors.textPrimary }}>{course.title}</h3>
-                    
-                    <div className="flex items-center gap-4 mb-4">
-                      <div className="flex items-center gap-1">
-                        {[...Array(5)].map((_, i) => (
-                          <Star key={i} size={14} fill={i < Math.floor(course.rating) ? colors.primary : 'none'} style={{ color: colors.primary }} />
-                        ))}
-                        <span className="text-sm font-semibold ml-1" style={{ color: colors.textPrimary }}>{course.rating}</span>
-                      </div>
-                      <div className="flex items-center gap-1 text-sm opacity-60" style={{ color: colors.textSecondary }}>
-                        <Clock size={14} />
-                        <span>{course.duration}</span>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  {/* Progress section */}
-                  <div className="mb-6">
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="text-sm font-semibold" style={{ color: colors.textPrimary }}>Progress</span>
-                      <span className="text-sm font-bold" style={{ color: colors.primary }}>{course.progress}%</span>
-                    </div>
-                    <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
-                      <div className="h-full transition-all duration-1000 rounded-full" style={{ width: `${course.progress}%`, backgroundColor: colors.primary }}></div>
-                    </div>
-                  </div>
-                  
-                  {/* Footer */}
-                  <div className="flex items-center justify-between pt-6 border-t" style={{ borderColor: `${colors.border}30` }}>
-                    <div className="flex items-center gap-3">
-                      <img src={course.authorImg} alt={course.author} className="w-10 h-10 rounded-full border-2 border-white shadow-sm object-cover" />
-                      <div>
-                        <span className="text-xs opacity-60 block" style={{ color: colors.textSecondary }}>Instructor</span>
-                        <span className="text-sm font-semibold" style={{ color: colors.textPrimary }}>{course.author}</span>
-                      </div>
-                    </div>
-                    <button className="p-2 rounded-full transition-all hover:scale-110"
-                      style={{ backgroundColor: `${colors.primary}10` }}
-                    >
-                      <Play size={16} style={{ color: colors.primary }} />
-                    </button>
-                  </div>
-                </div>
-              </div>
+              <CourseCard course={course} colors={colors} />
             </SwiperSlide>
           ))}
         </Swiper>
@@ -352,46 +460,10 @@ const Home = () => {
 
         <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {topCategories.map((cat, idx) => (
-            <div 
-              key={idx} 
-              className="group relative p-8 rounded-3xl transition-all duration-500 hover:scale-105 hover:shadow-2xl cursor-pointer"
-              style={{ 
-                backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                backdropFilter: 'blur(10px)',
-                border: `1px solid ${colors.border}20`,
-              }}
-            >
-              <div className="flex items-start justify-between mb-6">
-                <div className="p-4 rounded-2xl transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12"
-                  style={{ backgroundColor: `${colors.primary}10` }}
-                >
-                  <img src={cat.icon} alt={cat.title} className="w-12 h-12 object-contain" />
-                </div>
-                <div className="text-right">
-                  <div className="text-2xl font-bold" style={{ color: colors.primary }}>{cat.courses}</div>
-                  <div className="text-sm opacity-60" style={{ color: colors.textSecondary }}>Courses</div>
-                </div>
-              </div>
-              
-              <h3 className="text-xl font-bold mb-3" style={{ color: colors.textPrimary }}>{cat.title}</h3>
-              <p className="text-sm leading-relaxed mb-6 opacity-80" style={{ color: colors.textSecondary }}>{cat.desc}</p>
-              
-              <div className="flex items-center justify-between pt-6 border-t" style={{ borderColor: `${colors.border}30` }}>
-                <div className="flex items-center gap-2 text-sm">
-                  <Users size={16} className="opacity-60" />
-                  <span className="font-semibold" style={{ color: colors.textPrimary }}>{cat.students}</span>
-                  <span className="opacity-60" style={{ color: colors.textSecondary }}>students</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm font-semibold group-hover:translate-x-2 transition-transform duration-300"
-                  style={{ color: colors.primary }}
-                >
-                  Explore <ArrowRight size={16} />
-                </div>
-              </div>
-            </div>
+            <CategoryCard key={idx} cat={cat} colors={colors} />
           ))}
         </div>
-
+{/* 
         <div className="relative z-10 text-center mt-16">
           <NavLink to="/courses"
             className="group relative inline-flex items-center gap-3 px-8 py-4 rounded-2xl font-bold text-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
@@ -404,7 +476,7 @@ const Home = () => {
             Browse All Categories
             <ArrowRight size={20} className="transition-transform duration-300 group-hover:translate-x-2" />
           </NavLink>
-        </div>
+        </div> */}
       </section>
 
       {/* About Us Section */}
@@ -488,7 +560,7 @@ const Home = () => {
               </div>
             </div>
             
-            <NavLink to="/about"
+            <NavLink to="/about-app"
               className="group inline-flex items-center gap-3 text-lg font-semibold"
               style={{ color: colors.primary }}
             >
@@ -518,51 +590,7 @@ const Home = () => {
 
         <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
           {popularCourses.map((course, idx) => (
-            <div 
-              key={idx}
-              className="group relative p-8 rounded-3xl transition-all duration-500 hover:scale-105 hover:shadow-2xl cursor-pointer"
-              style={{ 
-                backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                backdropFilter: 'blur(10px)',
-                border: `1px solid ${colors.border}20`,
-              }}
-            >
-              <div className="flex items-start gap-6">
-                <div className="p-5 rounded-2xl transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12"
-                  style={{ backgroundColor: `${colors.primary}10` }}
-                >
-                  <img src={course.icon} alt={course.title} className="w-16 h-16 object-contain" />
-                </div>
-                <div className="flex-1">
-                  <div className="flex justify-between items-start mb-3">
-                    <h3 className="text-xl font-bold" style={{ color: colors.textPrimary }}>{course.title}</h3>
-                    <div className="text-lg font-bold" style={{ color: colors.primary }}>{course.price}</div>
-                  </div>
-                  <p className="text-sm leading-relaxed mb-6 opacity-80" style={{ color: colors.textSecondary }}>{course.desc}</p>
-                  
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                      <div className="flex items-center gap-1">
-                        <Star size={16} fill={colors.primary} style={{ color: colors.primary }} />
-                        <span className="text-sm font-semibold" style={{ color: colors.textPrimary }}>{course.rating}/5</span>
-                      </div>
-                      <div className="flex items-center gap-1 text-sm opacity-70" style={{ color: colors.textSecondary }}>
-                        <Clock size={16} />
-                        <span>{course.duration}</span>
-                      </div>
-                    </div>
-                    <button className="px-6 py-2 rounded-lg font-semibold transition-all hover:scale-105"
-                      style={{ 
-                        backgroundColor: `${colors.primary}10`,
-                        color: colors.primary,
-                      }}
-                    >
-                      Enroll Now
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <PopularCourseCard key={idx} course={course} colors={colors} />
           ))}
         </div>
 
@@ -686,46 +714,13 @@ const Home = () => {
 
         <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {blogs.map((blog, idx) => (
-            <div 
-              key={idx}
-              className="group relative rounded-3xl overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-2xl"
-              style={{ 
-                backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                backdropFilter: 'blur(10px)',
-                border: `1px solid ${colors.border}20`,
-              }}
-            >
-              <div className="overflow-hidden h-64">
-                <img 
-                  src={blog.img} 
-                  alt={blog.title} 
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-              </div>
-              <div className="p-6">
-                <div className="flex items-center gap-4 text-sm opacity-60 mb-4" style={{ color: colors.textSecondary }}>
-                  <span>{blog.date}</span>
-                  <span>•</span>
-                  <span>{blog.readTime} read</span>
-                </div>
-                <h3 className="text-xl font-bold mb-4" style={{ color: colors.textPrimary }}>{blog.title}</h3>
-                <p className="text-sm leading-relaxed mb-6 opacity-80" style={{ color: colors.textSecondary }}>{blog.desc}</p>
-                <a 
-                  href="#" 
-                  className="inline-flex items-center gap-2 font-semibold transition-all group-hover:gap-3"
-                  style={{ color: colors.primary }}
-                >
-                  Read More <ArrowRight size={16} />
-                </a>
-              </div>
-            </div>
+            <BlogCard key={idx} blog={blog} colors={colors} />
           ))}
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="relative px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto py-10 overflow-hidden">
-        {/* Background Gradient */}
+      {/* <section className="relative px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto py-10 overflow-hidden">
         <div className="absolute inset-0 z-0">
           <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-violet-50/50 via-fuchsia-50/50 to-pink-100/50"></div>
           <div className="absolute top-0 left-0 w-full h-20 bg-gradient-to-b from-cyan-50/50 to-transparent"></div>
@@ -766,14 +761,12 @@ const Home = () => {
               </NavLink>
             </div>
           </div>
-          
-          {/* Decorative elements */}
           <div className="absolute top-0 left-0 w-full h-full opacity-10">
             <div className="absolute top-10 left-10 w-20 h-20 rounded-full" style={{ backgroundColor: 'white' }}></div>
             <div className="absolute bottom-10 right-10 w-32 h-32 rounded-full" style={{ backgroundColor: 'white' }}></div>
           </div>
         </div>
-      </section>
+      </section> */}
       
 
       {/* Footer */}
@@ -784,4 +777,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default memo(Home);

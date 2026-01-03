@@ -40,8 +40,8 @@ const Footer = () => {
 
   const contactInfo = [
     { icon: <Phone size={18} />, text: '+91 6393430756', label: 'Call Us' },
-    { icon: <Mail size={18} />, text: 'abhay@codersadda.com', label: 'Email Us' },
-    { icon: <MapPin size={18} />, text: 'Tech Park, Silicon Valley, CA', label: 'Visit Us' },
+    { icon: <Mail size={18} />, text: 'digicodersteck@gmail.com', label: 'Email Us' },
+    { icon: <MapPin size={18} />, text: 'Aliganj Sector O, Lucknow', label: 'Visit Us' },
     { icon: <Clock size={18} />, text: 'Mon - Fri, 9:00 AM - 6:00 PM', label: 'Working Hours' },
   ];
 
@@ -155,7 +155,7 @@ const Footer = () => {
               </p>
               
               {/* Stats */}
-              <div className="flex flex-wrap gap-6 pt-4">
+              {/* <div className="flex flex-wrap gap-6 pt-4">
                 <div className="flex items-center gap-3">
                   <div className="p-2 rounded-lg" style={{ backgroundColor: `${colors.primary}10` }}>
                     <Users size={20} style={{ color: colors.primary }} />
@@ -174,7 +174,7 @@ const Footer = () => {
                     <div className="text-sm opacity-70" style={{ color: colors.textSecondary }}>Avg Rating</div>
                   </div>
                 </div>
-              </div>
+              </div> */}
               <div className="pt-4">
                 <p className="text-sm font-semibold mb-3 uppercase tracking-wider opacity-70" style={{ color: colors.textSecondary }}>
                   Follow Us
@@ -297,17 +297,17 @@ const Footer = () => {
 
         {/* Bottom Bar */}
         <div className="flex flex-col lg:flex-row justify-between items-center gap-6">
-          <div className="text-center lg:text-left">
+          <div className="text-center w-full">
             <p className="text-sm opacity-80" 
                style={{ color: colors.textSecondary }}>
-              © {new Date().getFullYear()} CodersAdda. All rights reserved.
+              © {new Date().getFullYear()} CodersAdda. All rights reserved. Design and Developed by <a style={{color:colors.primary}} target='_blank' href="https://digicoders.in">#TeamDigiCoders</a>
             </p>
-            <p className="text-xs opacity-60 mt-1" style={{ color: colors.textSecondary }}>
+            {/* <p className="text-xs opacity-60 mt-1" style={{ color: colors.textSecondary }}>
               Made with ❤️ for developers worldwide
-            </p>
+            </p> */}
           </div>
           
-          <div className="hidden md:flex items-center gap-6">
+          {/* <div className="hidden md:flex items-center gap-6">
             {legalLinks.map((link, idx) => (
               <NavLink 
                 key={idx}
@@ -319,14 +319,14 @@ const Footer = () => {
                 {link.title}
               </NavLink>
             ))}
-          </div>
+          </div> */}
           
-          <div className="flex items-center gap-2 text-sm opacity-70" style={{ color: colors.textSecondary }}>
+          {/* <div className="flex items-center gap-2 text-sm opacity-70" style={{ color: colors.textSecondary }}>
             <Globe size={14} />
             <span>English</span>
             <span className="opacity-50">•</span>
             <span>🇺🇸</span>
-          </div>
+          </div> */}
         </div>
 
         {/* Trust Badges */}

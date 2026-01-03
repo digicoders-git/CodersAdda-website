@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import Lottie from 'lottie-react';
+import companyAnimation from '../animtedSVG/company.json';
 import { 
   Building2, Target, Rocket, Shield, Users, Award, 
   Code, Smartphone, Palette, Database, Globe, BookOpen,
@@ -9,7 +11,6 @@ import {
   GraduationCap, Briefcase, Star, ArrowRight
 } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
-import img5 from '../assets/new/img5.png';
 
 const AboutUs = () => {
   const { colors } = useTheme();
@@ -160,24 +161,16 @@ const AboutUs = () => {
             </NavLink>
           </div>
 
-          {/* Right Side - Image */}
+          {/* Right Side - Animation */}
           <div className="flex-1">
             <div className="relative">
               <div className="relative mx-auto max-w-lg">
-                <div className="relative overflow-hidden rounded-3xl"
-                  style={{
-                    background: `linear-gradient(135deg, ${colors.primary}10, ${colors.secondary}10)`,
-                    padding: '20px'
-                  }}
-                >
-                  <img 
-                    src={img5} 
-                    alt="DigiCoders Team" 
-                    className="w-full h-auto object-contain transition-transform duration-700 hover:scale-105"
-                    style={{
-                      filter: 'drop-shadow(0 25px 50px rgba(0,0,0,0.15))',
-                      maxHeight: '450px'
-                    }}
+                <div className="relative overflow-hidden rounded-3xl">
+                  <Lottie 
+                    animationData={companyAnimation}
+                    loop={true}
+                    autoplay={true}
+                    className="w-full h-auto"
                   />
                 </div>
               </div>
