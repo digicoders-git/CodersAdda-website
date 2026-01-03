@@ -3,11 +3,13 @@ import { Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './context/ThemeContext';
 import Navbar from './components/Navbar';
 import { routes } from './routes';
+import ScrollToTop from './ScrollToTop';
 
 
 const App = () => {
   return (
     <ThemeProvider>
+      <ScrollToTop />
       <div className="relative">
         <Navbar />
         <Routes>
