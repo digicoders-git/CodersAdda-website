@@ -156,12 +156,12 @@ const Home = () => {
         <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-white via-white to-blue-50/30"></div>
       </div>
       {/* Hero Section */}
-      <div className="relative z-10">
+      <div className="relative z-10 mb-10">
         <Header />
       </div>
 
       {/* Stats Banner */}
-      <div className="relative z-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto -mt-20 mb-10">
+      <div className="relative z-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto -mt-25 mb-10">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {stats.map((stat, idx) => (
             <div 
@@ -574,9 +574,9 @@ const Home = () => {
               color: colors.white,
             }}
           >
-            <Download size={20} />
             Download App & Start Learning
-            <ArrowRight size={20} className="transition-transform duration-300 group-hover:translate-x-2" />
+            <Download size={20} />
+            {/* <ArrowRight size={20} className="transition-transform duration-300 group-hover:translate-x-2" /> */}
           </NavLink>
         </div>
       </section>

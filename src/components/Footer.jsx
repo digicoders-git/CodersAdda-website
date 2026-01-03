@@ -32,11 +32,10 @@ const Footer = () => {
   ];
 
   const resources = [
-    { title: 'Blog & Articles', path: '/blog' },
-    { title: 'Tutorials', path: '/tutorials' },
-    { title: 'Documentation', path: '/docs' },
-    { title: 'Community', path: '/community' },
-    { title: 'Support Center', path: '/support' },
+     { title: 'Privacy Policy', path: '/privacy' },
+    { title: 'Terms of Service', path: '/terms' },
+    { title: 'Refund Policy', path: '/refund' },
+    { title: 'Disclaimer', path: '/disclaimer' }
   ];
 
   const contactInfo = [
@@ -176,16 +175,42 @@ const Footer = () => {
                   </div>
                 </div>
               </div>
+              <div className="pt-4">
+                <p className="text-sm font-semibold mb-3 uppercase tracking-wider opacity-70" style={{ color: colors.textSecondary }}>
+                  Follow Us
+                </p>
+                <div className="flex items-center gap-3">
+                  {socialLinks.map((social, index) => (
+                    <a 
+                      key={index}
+                      href="#" 
+                      className="group relative w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 
+                               hover:scale-110 hover:-translate-y-1 active:scale-95"
+                      style={{ 
+                        backgroundColor: `${social.color}15`,
+                        color: social.color
+                      }}
+                      aria-label={social.label}
+                    >
+                      <social.icon size={18} />
+                      <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded 
+                               opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+                        {social.label}
+                      </span>
+                    </a>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
 
           {/* Quick Links Column - 2 columns on desktop */}
           <div className="lg:col-span-2">
-            <div className="space-y-6">
+            <div className="space-y-2">
               <h4 className="font-bold text-lg tracking-wide uppercase" style={{ color: colors.textPrimary }}>
                 Quick Links
               </h4>
-              <ul className="space-y-3">
+              <ul className="space-y-1">
                 {quickLinks.map((link, idx) => (
                   <li key={idx}>
                     <NavLink 
@@ -209,11 +234,11 @@ const Footer = () => {
 
           {/* Resources Column - 2 columns on desktop */}
           <div className="lg:col-span-2">
-            <div className="space-y-6">
+            <div className="space-y-2">
               <h4 className="font-bold text-lg tracking-wide uppercase" style={{ color: colors.textPrimary }}>
-                Resources
+                Legal Links
               </h4>
-              <ul className="space-y-3">
+              <ul className="space-y-1">
                 {resources.map((link, idx) => (
                   <li key={idx}>
                     <NavLink 
@@ -259,32 +284,6 @@ const Footer = () => {
               </div>
               
               {/* Social Links */}
-              <div className="pt-4">
-                <p className="text-sm font-semibold mb-3 uppercase tracking-wider opacity-70" style={{ color: colors.textSecondary }}>
-                  Follow Us
-                </p>
-                <div className="flex items-center gap-3">
-                  {socialLinks.map((social, index) => (
-                    <a 
-                      key={index}
-                      href="#" 
-                      className="group relative w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 
-                               hover:scale-110 hover:-translate-y-1 active:scale-95"
-                      style={{ 
-                        backgroundColor: `${social.color}15`,
-                        color: social.color
-                      }}
-                      aria-label={social.label}
-                    >
-                      <social.icon size={18} />
-                      <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded 
-                               opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
-                        {social.label}
-                      </span>
-                    </a>
-                  ))}
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -308,7 +307,7 @@ const Footer = () => {
             </p>
           </div>
           
-          <div className="flex items-center gap-6">
+          <div className="hidden md:flex items-center gap-6">
             {legalLinks.map((link, idx) => (
               <NavLink 
                 key={idx}

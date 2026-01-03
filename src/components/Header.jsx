@@ -51,13 +51,13 @@ const Header = () => {
       <div className="absolute bottom-1/4 left-1/4 w-3 h-3 rounded-full opacity-15 animate-pulse delay-700" style={{ backgroundColor: colors.primary }}></div>
 
       {/* Main Content */}
-      <div className="relative z-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto pt-12 sm:pt-16 lg:pt-24 pb-16 sm:pb-20 lg:pb-28">
+      <div className="relative z-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto pt-10 sm:pt-14 lg:pt-10 pb-16 sm:pb-20 lg:pb-28">
         <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-16">
           
           {/* Left Content Section */}
           <div className="flex-1 lg:max-w-xl xl:max-w-2xl">
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6 transition-all duration-300 hover:scale-105"
+            <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full mb-2 transition-all duration-300 hover:scale-105"
               style={{ 
                 backgroundColor: `${colors.primary}15`,
                 border: `1px solid ${colors.primary}20`
@@ -70,7 +70,7 @@ const Header = () => {
             </div>
 
             {/* Main Heading */}
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight sm:leading-tight md:leading-tight mb-6">
+            <h1 className="text-4xl sm:text-3xl md:text-5xl lg:text-5xl font-bold leading-tight sm:leading-tight md:leading-tight mb-2">
               <span className="block" style={{ color: colors.textPrimary }}>
                 Start Learning
               </span>
@@ -254,7 +254,7 @@ const Header = () => {
                       {stat.icon}
                     </div>
                   </div>
-                  <div className="text-2xl lg:text-3xl font-bold opacity-20">0{idx + 1}</div>
+                  {/* <div className="text-2xl lg:text-3xl font-bold opacity-20">0{idx + 1}</div> */}
                 </div>
                 
                 <h3 className="text-3xl lg:text-4xl font-bold mb-2 group-hover:scale-105 transition-transform duration-300 inline-block"
@@ -287,7 +287,7 @@ const Header = () => {
       </div>
 
       {/* Scroll indicator */}
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 opacity-50 animate-bounce">
+      {/* <div className="absolute bottom-4 left-1/2 -translate-x-1/2 opacity-50 animate-bounce">
         <div className="w-6 h-10 rounded-full border-2 flex justify-center"
           style={{ borderColor: colors.textSecondary }}
         >
@@ -295,7 +295,7 @@ const Header = () => {
             style={{ backgroundColor: colors.textSecondary }}
           ></div>
         </div>
-      </div>
+      </div> */}
 
       <style jsx>{`
         @keyframes float {
