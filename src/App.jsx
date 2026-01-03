@@ -22,7 +22,7 @@ const App = () => {
           ))}
         </Routes>
       </div>
-      <style jsx>{`
+      <style>{`
         @keyframes fadeSlide {
           from {
             opacity: 0;

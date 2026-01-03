@@ -1,7 +1,70 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, memo } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
-import { Menu, X, Download, ChevronRight } from 'lucide-react';
+import { Menu, X, Download } from 'lucide-react';
+
+const NavItem = memo(({ link, colors, isActive, pathname, toggleMenu }) => (
+  <NavLink 
+    to={link.path}
+    onClick={toggleMenu ? () => toggleMenu() : undefined}
+    className={`relative px-5 py-2.5 rounded-lg font-medium text-sm transition-all duration-300 
+    group ${isActive ? '' : 'hover:scale-105'}`}
+    style={{
+      color: isActive ? colors.primary : colors.textSecondary,
+    }}
+  >
+    <span className="relative z-10">
+      {link.title}
+    </span>
+    
+    <div className={`absolute inset-0 rounded-lg transition-all duration-300 ${
+      pathname === link.path ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+    }`}
+      style={{ 
+        backgroundColor: colors.primary + '15',
+        boxShadow: `inset 0 0 0 1px ${colors.primary}30`
+      }}
+    ></div>
+    
+    {pathname === link.path && (
+      <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full"
+        style={{ 
+          backgroundColor: colors.primary,
+        }}
+      ></div>
+    )}
+  </NavLink>
+));
+
+const MobileNavItem = memo(({ link, colors, isActive, pathname, toggleMenu }) => (
+  <NavLink 
+    to={link.path}
+    onClick={toggleMenu}
+    className={`block relative py-3 px-4 rounded-lg transition-all duration-300 active:scale-95 ${
+      isActive ? '' : 'hover:bg-gray-50'
+    }`}
+    style={{
+      color: isActive ? colors.primary : colors.textSecondary,
+    }}
+  >
+    <div className="flex items-center justify-between">
+      <span className="font-medium">{link.title}</span>
+      {pathname === link.path && (
+        <div className="w-2 h-2 rounded-full"
+          style={{ backgroundColor: colors.primary }}
+        ></div>
+      )}
+    </div>
+    
+    <div className={`absolute inset-0 rounded-lg transition-all duration-300 ${
+      pathname === link.path ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+    }`}
+      style={{ 
+        backgroundColor: colors.primary + '15',
+      }}
+    ></div>
+  </NavLink>
+));
 
 const Navbar = () => {
   const { colors } = useTheme();
@@ -9,7 +72,7 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
 
-  const navLinks = [
+  const navLinks = useMemo(() => [
     { title: 'Home', path: '/' },
     { title: 'About App', path: '/about-app' },
     { title: 'About Us', path: '/about-us' },
@@ -17,23 +80,27 @@ const Navbar = () => {
     { title: 'Terms', path: '/terms' },
     { title: 'Refund', path: '/refund' },
     { title: 'Disclaimer', path: '/disclaimer' }
-  ];
+  ], []);
 
-  // Handle scroll effect
   useEffect(() => {
+    let ticking = false;
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setIsScrolled(window.scrollY > 20);
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Close menu on route change
   useEffect(() => {
     setIsMenuOpen(false);
-  }, [location]);
+  }, [location.pathname]);
 
-  // Prevent body scroll when menu is open
   useEffect(() => {
     if (isMenuOpen) {
       document.body.style.overflow = 'hidden';
@@ -46,12 +113,11 @@ const Navbar = () => {
   }, [isMenuOpen]);
 
   const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
+    setIsMenuOpen(prev => !prev);
   };
 
   return (
     <>
-      {/* Main Navbar with Gradient Background */}
       <nav 
         className={`fixed w-full top-0 left-0 z-50 transition-all duration-300 ${
           isScrolled ? 'py-3 shadow-xl' : 'py-4'
@@ -65,18 +131,7 @@ const Navbar = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center">
             
-            {/* Logo Section */}
             <div className="flex items-center gap-3">
-              {/* <div className="relative">
-                <div className="w-10 h-10 rounded-xl flex items-center justify-center"
-                  style={{ 
-                    background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 100%)`,
-                    boxShadow: `0 4px 20px ${colors.primary}30`
-                  }}
-                >
-                  <span className="text-xl font-bold text-white">C</span>
-                </div>
-              </div> */}
               <div 
                 className="text-xl font-bold cursor-pointer"
                 style={{ 
@@ -89,49 +144,19 @@ const Navbar = () => {
               </div>
             </div>
 
-            {/* Desktop Navigation */}
             <div className="hidden lg:flex items-center gap-2">
               {navLinks.map((link, index) => (
-                <NavLink 
+                <NavItem 
                   key={index}
-                  to={link.path}
-                  className={({ isActive }) => 
-                    `relative px-5 py-2.5 rounded-lg font-medium text-sm transition-all duration-300 
-                    group ${isActive ? '' : 'hover:scale-105'}`
-                  }
-                  style={({ isActive }) => ({
-                    color: isActive ? colors.primary : colors.textSecondary,
-                  })}
-                >
-                  <span className="relative z-10">
-                    {link.title}
-                  </span>
-                  
-                  {/* Hover & Active Background Effect - Same for both */}
-                  <div className={`absolute inset-0 rounded-lg transition-all duration-300 ${
-                    location.pathname === link.path ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
-                  }`}
-                    style={{ 
-                      backgroundColor: colors.primary + '15',
-                      boxShadow: `inset 0 0 0 1px ${colors.primary}30`
-                    }}
-                  ></div>
-                  
-                  {/* Active Indicator Dot */}
-                  {location.pathname === link.path && (
-                    <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full"
-                      style={{ 
-                        backgroundColor: colors.primary,
-                      }}
-                    ></div>
-                  )}
-                </NavLink>
+                  link={link}
+                  colors={colors}
+                  isActive={location.pathname === link.path}
+                  pathname={location.pathname}
+                />
               ))}
             </div>
 
-            {/* Desktop CTA & Mobile Menu Button */}
             <div className="flex items-center gap-4">
-              {/* Desktop Download Button */}
               <NavLink 
                 to="/download"
                 className="hidden lg:flex items-center gap-2 px-6 py-2.5 rounded-lg font-semibold 
@@ -146,7 +171,6 @@ const Navbar = () => {
                 <span className="relative z-10">Download App</span>
               </NavLink>
 
-              {/* Mobile Menu Button */}
               <button 
                 onClick={toggleMenu}
                 className="lg:hidden w-10 h-10 rounded-lg flex items-center justify-center 
@@ -163,7 +187,6 @@ const Navbar = () => {
         </div>
       </nav>
 
-      {/* Mobile Menu Overlay - Fixed Height */}
       <div 
         className={`fixed inset-0 z-40 lg:hidden transition-all duration-300 ${
           isMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'
@@ -174,7 +197,6 @@ const Navbar = () => {
         onClick={toggleMenu}
       />
 
-      {/* Mobile Menu Panel - Fixed Height */}
       <div 
         className={`fixed top-0 right-0 h-full w-full max-w-full z-50 lg:hidden 
                    transition-transform duration-300 ease-out overflow-y-auto ${
@@ -185,20 +207,12 @@ const Navbar = () => {
           boxShadow: '-4px 0 20px rgba(0,0,0,0.1)'
         }}
       >
-        {/* Mobile Menu Header */}
         <div className="sticky w-full top-0 z-10 flex justify-between items-center p-5 border-b"
           style={{ 
             backgroundColor: colors.white,
             borderColor: colors.border + '20'
           }}>
           <div className="flex items-center gap-3">
-            {/* <div className="w-10 h-10 rounded-xl flex items-center justify-center"
-              style={{ 
-                background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 100%)`,
-              }}
-            >
-              <span className="text-xl font-bold text-white">C</span>
-            </div> */}
             <div 
               className="text-xl font-bold"
               style={{ 
@@ -222,9 +236,7 @@ const Navbar = () => {
           </button>
         </div>
 
-        {/* Mobile Navigation Content */}
         <div className="p-5">
-          {/* Mobile Download CTA */}
           <NavLink 
             to="/download"
             onClick={toggleMenu}
@@ -239,48 +251,23 @@ const Navbar = () => {
             Download App
           </NavLink>
 
-          {/* Mobile Navigation Links */}
           <div className="space-y-1">
             <p className="text-xs font-semibold uppercase tracking-wider mb-3 px-2 opacity-60"
                style={{ color: colors.textSecondary }}>
               Menu
             </p>
             {navLinks.map((link, index) => (
-              <NavLink 
+              <MobileNavItem 
                 key={index}
-                to={link.path}
-                onClick={toggleMenu}
-                className={({ isActive }) => 
-                  `block relative py-3 px-4 rounded-lg transition-all duration-300 active:scale-95 ${
-                    isActive ? '' : 'hover:bg-gray-50'
-                  }`
-                }
-                style={({ isActive }) => ({
-                  color: isActive ? colors.primary : colors.textSecondary,
-                })}
-              >
-                <div className="flex items-center justify-between">
-                  <span className="font-medium">{link.title}</span>
-                  {location.pathname === link.path && (
-                    <div className="w-2 h-2 rounded-full"
-                      style={{ backgroundColor: colors.primary }}
-                    ></div>
-                  )}
-                </div>
-                
-                {/* Hover & Active Background Effect - Same for both */}
-                <div className={`absolute inset-0 rounded-lg transition-all duration-300 ${
-                  location.pathname === link.path ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
-                }`}
-                  style={{ 
-                    backgroundColor: colors.primary + '15',
-                  }}
-                ></div>
-              </NavLink>
+                link={link}
+                colors={colors}
+                isActive={location.pathname === link.path}
+                pathname={location.pathname}
+                toggleMenu={toggleMenu}
+              />
             ))}
           </div>
 
-          {/* Mobile Menu Footer */}
           <div className="mt-8 pt-6 border-t text-center"
             style={{ borderColor: colors.border + '20' }}>
             <p className="text-sm opacity-70 mb-4" style={{ color: colors.textSecondary }}>
@@ -290,10 +277,9 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Spacer for fixed navbar - Reduced Height */}
       <div className="h-16"></div>
     </>
   );
 };
 
-export default Navbar;
+export default memo(Navbar);

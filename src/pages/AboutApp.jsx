@@ -1,62 +1,183 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, memo } from 'react';
 import { useTheme } from '../context/ThemeContext';
-import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import Lottie from 'lottie-react';
 import softwareAnimation from '../animtedSVG/Software.json';
 import { 
   Smartphone, BookOpen, Users, Target, Video, FileText, Briefcase, 
-  PlayCircle, Crown, TrendingUp, CheckCircle, Download, Sparkles,
-  Award, Globe, Clock, Zap, ArrowRight, Shield, Star, Layers
+  PlayCircle, TrendingUp, CheckCircle, Download, Sparkles,
+  Award, Clock, Zap, ArrowRight, Layers
 } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
+
+const TargetUserCard = memo(({ user, colors }) => (
+  <div 
+    className="group shadow relative p-6 rounded-2xl transition-all duration-500 hover:scale-105 hover:shadow-2xl cursor-pointer will-change-transform"
+    style={{ 
+      backgroundColor: 'rgba(255, 255, 255, 0.9)',
+      backdropFilter: 'blur(10px)',
+      border: `1px solid ${colors.border}20`,
+    }}
+  >
+    <div className="flex flex-col items-center text-center">
+      <div className="w-16 h-16 rounded-2xl mb-6 flex items-center justify-center transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12"
+        style={{ 
+          backgroundColor: `${user.color}15`,
+          color: user.color
+        }}
+      >
+        {user.icon}
+      </div>
+      <h3 className="text-xl font-bold mb-3" style={{ color: colors.textPrimary }}>{user.title}</h3>
+      <p className="text-sm opacity-80" style={{ color: colors.textSecondary }}>{user.description}</p>
+    </div>
+  </div>
+));
+
+const FeatureCard = memo(({ feature, colors }) => (
+  <div 
+    className="group shadow relative p-8 rounded-3xl transition-all duration-500 hover:scale-105 hover:shadow-2xl will-change-transform"
+    style={{ 
+      backgroundColor: 'rgba(255, 255, 255, 0.9)',
+      backdropFilter: 'blur(10px)',
+      border: `1px solid ${colors.border}20`,
+    }}
+  >
+    <div className="flex items-start gap-6">
+      <div className="p-4 rounded-2xl transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12"
+        style={{ backgroundColor: `${feature.color}15`, color: feature.color }}
+      >
+        {feature.icon}
+      </div>
+      <div className="flex-1">
+        <h3 className="text-2xl font-bold mb-3" style={{ color: colors.textPrimary }}>
+          {feature.title}
+        </h3>
+        <p className="text-lg leading-relaxed mb-6 opacity-80" style={{ color: colors.textSecondary }}>
+          {feature.description}
+        </p>
+        <ul className="space-y-2">
+          {feature.points.map((point, idx) => (
+            <li key={idx} className="flex items-center gap-3">
+              <CheckCircle size={18} style={{ color: colors.primary }} />
+              <span className="font-medium" style={{ color: colors.textSecondary }}>{point}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </div>
+));
+
+const SubscriptionPlanCard = memo(({ plan, colors }) => (
+  <div 
+    className={`relative shadow rounded-3xl overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-2xl will-change-transform ${
+      plan.popular ? 'border-2' : 'border'
+    }`}
+    style={{ 
+      backgroundColor: 'rgba(255, 255, 255, 0.9)',
+      backdropFilter: 'blur(10px)',
+      borderColor: plan.popular ? plan.color : `${colors.border}20`
+    }}
+  >
+    {plan.popular && (
+      <div className="absolute top-0 right-0 px-6 py-2 rounded-bl-2xl font-bold text-sm"
+        style={{ 
+          backgroundColor: plan.color,
+          color: colors.white
+        }}
+      >
+        MOST POPULAR
+      </div>
+    )}
+    
+    <div className="p-8">
+      <div className="mb-8">
+        <h3 className="text-2xl font-bold mb-2" style={{ color: colors.textPrimary }}>
+          {plan.name}
+        </h3>
+        <div className="flex items-baseline gap-1">
+          <span className="text-4xl font-bold" style={{ color: colors.textPrimary }}>
+            {plan.price}
+          </span>
+          <span className="text-lg opacity-70" style={{ color: colors.textSecondary }}>
+            {plan.period}
+          </span>
+        </div>
+      </div>
+      
+      <ul className="space-y-4 mb-8">
+        {plan.features.map((feature, idx) => (
+          <li key={idx} className="flex items-center gap-3">
+            <CheckCircle size={18} style={{ color: colors.primary }} />
+            <span className="font-medium" style={{ color: colors.textSecondary }}>{feature}</span>
+          </li>
+        ))}
+      </ul>
+      
+      <NavLink 
+        to="/subscribe"
+        className="block w-full py-4 rounded-xl font-semibold text-center transition-all duration-300 
+                 hover:scale-105 hover:shadow-lg active:scale-95"
+        style={{ 
+          backgroundColor: plan.popular ? plan.color : `${colors.primary}10`,
+          color: plan.popular ? colors.white : colors.primary
+        }}
+      >
+        {plan.popular ? 'Get Started' : 'Choose Plan'}
+      </NavLink>
+    </div>
+  </div>
+));
+
+const WhyChooseUsCard = memo(({ item, colors }) => (
+  <div 
+    className="group p-6 rounded-2xl transition-all duration-300 hover:scale-105 hover:shadow-xl will-change-transform"
+    style={{ 
+      backgroundColor: colors.white,
+      border: `1px solid ${colors.border}20`
+    }}
+  >
+    <div className="flex items-center gap-4 mb-4">
+      <div className="p-3 rounded-xl transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12"
+        style={{ backgroundColor: `${colors.primary}10`, color: colors.primary }}
+      >
+        {item.icon}
+      </div>
+      <h3 className="text-xl font-bold" style={{ color: colors.textPrimary }}>{item.title}</h3>
+    </div>
+    <p className="text-sm opacity-80" style={{ color: colors.textSecondary }}>{item.description}</p>
+  </div>
+));
 
 const AboutApp = () => {
   const { colors } = useTheme();
   const [scrollY, setScrollY] = useState(0);
 
   useEffect(() => {
+    let ticking = false;
     const handleScroll = () => {
-      setScrollY(window.scrollY);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setScrollY(window.scrollY);
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const targetUsers = [
-    {
-      title: 'Students',
-      description: 'Building technical skills alongside academic studies',
-      icon: <Users size={24} />,
-      color: '#4F46E5'
-    },
-    {
-      title: 'Beginners',
-      description: 'Starting journey in coding and digital technologies',
-      icon: <BookOpen size={24} />,
-      color: '#10B981'
-    },
-    {
-      title: 'Developers',
-      description: 'Improving or expanding existing knowledge',
-      icon: <Target size={24} />,
-      color: '#F59E0B'
-    },
-    {
-      title: 'Professionals',
-      description: 'Preparing for career growth or role changes',
-      icon: <Briefcase size={24} />,
-      color: '#EF4444'
-    },
-    {
-      title: 'Self-Learners',
-      description: 'Prefer flexible, practical, and focused learning',
-      icon: <TrendingUp size={24} />,
-      color: '#8B5CF6'
-    }
-  ];
+  const targetUsers = useMemo(() => [
+    { title: 'Students', description: 'Building technical skills alongside academic studies', icon: <Users size={24} />, color: '#4F46E5' },
+    { title: 'Beginners', description: 'Starting journey in coding and digital technologies', icon: <BookOpen size={24} />, color: '#10B981' },
+    { title: 'Developers', description: 'Improving or expanding existing knowledge', icon: <Target size={24} />, color: '#F59E0B' },
+    { title: 'Professionals', description: 'Preparing for career growth or role changes', icon: <Briefcase size={24} />, color: '#EF4444' },
+    { title: 'Self-Learners', description: 'Prefer flexible, practical, and focused learning', icon: <TrendingUp size={24} />, color: '#8B5CF6' }
+  ], []);
 
-  const features = [
+  const features = useMemo(() => [
     {
       icon: <Video size={28} />,
       title: 'Online Courses',
@@ -85,9 +206,9 @@ const AboutApp = () => {
       color: '#F59E0B',
       points: ['Quick Concept Learning', 'Time-Efficient Format', 'Engaging Content']
     }
-  ];
+  ], [colors.primary, colors.secondary]);
 
-  const subscriptionPlans = [
+  const subscriptionPlans = useMemo(() => [
     {
       name: 'Monthly Plan',
       price: '$19',
@@ -104,39 +225,19 @@ const AboutApp = () => {
       popular: true,
       color: colors.secondary
     }
-  ];
+  ], [colors.primary, colors.secondary]);
 
-  const whyChooseUs = [
-    {
-      title: 'Practical Learning Focus',
-      description: 'Real-world application over theoretical knowledge',
-      icon: <Zap size={20} />
-    },
-    {
-      title: 'Industry-Aligned Skills',
-      description: 'Curriculum designed with current market requirements',
-      icon: <Target size={20} />
-    },
-    {
-      title: 'Flexible Learning',
-      description: 'Learn at your own pace, anytime, anywhere',
-      icon: <Clock size={20} />
-    },
-    {
-      title: 'Career Support',
-      description: 'Jobs, internships, and career guidance',
-      icon: <Briefcase size={20} />
-    }
-  ];
+  const whyChooseUs = useMemo(() => [
+    { title: 'Practical Learning Focus', description: 'Real-world application over theoretical knowledge', icon: <Zap size={20} /> },
+    { title: 'Industry-Aligned Skills', description: 'Curriculum designed with current market requirements', icon: <Target size={20} /> },
+    { title: 'Flexible Learning', description: 'Learn at your own pace, anytime, anywhere', icon: <Clock size={20} /> },
+    { title: 'Career Support', description: 'Jobs, internships, and career guidance', icon: <Briefcase size={20} /> }
+  ], []);
 
   return (
     <div className="w-full min-h-screen overflow-x-hidden" style={{ backgroundColor: colors.white }}>
-      {/* <Navbar /> */}
-
-      {/* Hero Section */}
       <section className="relative overflow-hidden px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto pt-8 pb-12">
-        {/* Background Elements */}
-        <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 z-0 pointer-events-none">
           <div 
             className="absolute top-20 -right-20 w-96 h-96 rounded-full opacity-10 blur-3xl"
             style={{ backgroundColor: colors.primary }}
@@ -149,7 +250,6 @@ const AboutApp = () => {
 
         <div className="relative z-10 flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
           <div className="flex-1">
-            {/* Badge */}
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-4"
               style={{ 
                 backgroundColor: `${colors.primary}15`,
@@ -162,7 +262,6 @@ const AboutApp = () => {
               </span>
             </div>
 
-            {/* Main Heading */}
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 leading-tight">
               <span style={{ color: colors.textPrimary }}>About the</span>
               <br />
@@ -174,14 +273,12 @@ const AboutApp = () => {
               </span>
             </h1>
 
-            {/* Description */}
             <p className="text-base lg:text-lg leading-relaxed mb-6 opacity-80 max-w-xl"
               style={{ color: colors.textSecondary }}>
               A modern education platform designed to help students, developers, and working professionals 
               upskill through structured learning and practical knowledge.
             </p>
 
-            {/* Stats */}
             <div className="flex flex-wrap gap-4 mb-6">
               <div className="flex items-center gap-2">
                 <div className="p-2 rounded-lg" style={{ backgroundColor: `${colors.primary}10` }}>
@@ -212,7 +309,6 @@ const AboutApp = () => {
               </div>
             </div>
 
-            {/* CTA */}
             <NavLink 
               to="/download"
               className="group inline-flex items-center gap-3 px-6 py-3 rounded-xl font-semibold 
@@ -228,7 +324,6 @@ const AboutApp = () => {
             </NavLink>
           </div>
 
-          {/* Hero Animation */}
           <div className="flex-1 relative">
             <div className="relative"
               style={{
@@ -237,7 +332,6 @@ const AboutApp = () => {
               }}
             >
               <div className="relative mx-auto max-w-sm lg:max-w-md">
-                {/* Main Animation Container */}
                 <div className="relative overflow-hidden rounded-2xl shadow-xl">
                   <Lottie 
                     animationData={softwareAnimation}
@@ -248,8 +342,7 @@ const AboutApp = () => {
                   />
                 </div>
                 
-                {/* Floating Elements */}
-                <div className="absolute -top-3 -left-3 w-12 h-12 rounded-xl flex items-center justify-center animate-float"
+                <div className="absolute -top-3 -left-3 w-12 h-12 rounded-xl flex items-center justify-center animate-float will-change-transform"
                   style={{ 
                     backgroundColor: colors.white,
                     boxShadow: '0 8px 20px rgba(0,0,0,0.1)',
@@ -258,7 +351,7 @@ const AboutApp = () => {
                 >
                   <BookOpen size={18} style={{ color: colors.primary }} />
                 </div>
-                <div className="absolute -bottom-3 -right-3 w-12 h-12 rounded-xl flex items-center justify-center animate-float"
+                <div className="absolute -bottom-3 -right-3 w-12 h-12 rounded-xl flex items-center justify-center animate-float will-change-transform"
                   style={{ 
                     backgroundColor: colors.white,
                     boxShadow: '0 8px 20px rgba(0,0,0,0.1)',
@@ -267,7 +360,7 @@ const AboutApp = () => {
                 >
                   <Video size={18} style={{ color: colors.secondary }} />
                 </div>
-                <div className="absolute top-1/2 -left-6 w-10 h-10 rounded-lg flex items-center justify-center animate-float"
+                <div className="absolute top-1/2 -left-6 w-10 h-10 rounded-lg flex items-center justify-center animate-float will-change-transform"
                   style={{ 
                     backgroundColor: colors.white,
                     boxShadow: '0 6px 15px rgba(0,0,0,0.1)',
@@ -282,7 +375,6 @@ const AboutApp = () => {
         </div>
       </section>
 
-      {/* Target Users Section */}
       <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto py-2">
         <div className="text-center mb-16">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-2" style={{ color: colors.textPrimary }}>
@@ -295,33 +387,11 @@ const AboutApp = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
           {targetUsers.map((user, index) => (
-            <div 
-              key={index}
-              className="group shadow relative p-6 rounded-2xl transition-all duration-500 hover:scale-105 hover:shadow-2xl cursor-pointer"
-              style={{ 
-                backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                backdropFilter: 'blur(10px)',
-                border: `1px solid ${colors.border}20`,
-              }}
-            >
-              <div className="flex flex-col items-center text-center">
-                <div className="w-16 h-16 rounded-2xl mb-6 flex items-center justify-center transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12"
-                  style={{ 
-                    backgroundColor: `${user.color}15`,
-                    color: user.color
-                  }}
-                >
-                  {user.icon}
-                </div>
-                <h3 className="text-xl font-bold mb-3" style={{ color: colors.textPrimary }}>{user.title}</h3>
-                <p className="text-sm opacity-80" style={{ color: colors.textSecondary }}>{user.description}</p>
-              </div>
-            </div>
+            <TargetUserCard key={index} user={user} colors={colors} />
           ))}
         </div>
       </section>
 
-      {/* Features Section */}
       <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto py-20">
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-4"
@@ -345,44 +415,11 @@ const AboutApp = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {features.map((feature, index) => (
-            <div 
-              key={index}
-              className="group shadow relative p-8 rounded-3xl transition-all duration-500 hover:scale-105 hover:shadow-2xl"
-              style={{ 
-                backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                backdropFilter: 'blur(10px)',
-                border: `1px solid ${colors.border}20`,
-              }}
-            >
-              <div className="flex items-start gap-6">
-                <div className="p-4 rounded-2xl transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12"
-                  style={{ backgroundColor: `${feature.color}15`, color: feature.color }}
-                >
-                  {feature.icon}
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-2xl font-bold mb-3" style={{ color: colors.textPrimary }}>
-                    {feature.title}
-                  </h3>
-                  <p className="text-lg leading-relaxed mb-6 opacity-80" style={{ color: colors.textSecondary }}>
-                    {feature.description}
-                  </p>
-                  <ul className="space-y-2">
-                    {feature.points.map((point, idx) => (
-                      <li key={idx} className="flex items-center gap-3">
-                        <CheckCircle size={18} style={{ color: colors.primary }} />
-                        <span className="font-medium" style={{ color: colors.textSecondary }}>{point}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            </div>
+            <FeatureCard key={index} feature={feature} colors={colors} />
           ))}
         </div>
       </section>
 
-      {/* Subscription Plans Section */}
       <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto py-2">
         <div className="text-center mb-16">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6" style={{ color: colors.textPrimary }}>
@@ -395,70 +432,11 @@ const AboutApp = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-4xl mx-auto">
           {subscriptionPlans.map((plan, index) => (
-            <div 
-              key={index}
-              className={`relative shadow rounded-3xl overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-2xl ${
-                plan.popular ? 'border-2' : 'border'
-              }`}
-              style={{ 
-                backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                backdropFilter: 'blur(10px)',
-                borderColor: plan.popular ? plan.color : `${colors.border}20`
-              }}
-            >
-              {plan.popular && (
-                <div className="absolute top-0 right-0 px-6 py-2 rounded-bl-2xl font-bold text-sm"
-                  style={{ 
-                    backgroundColor: plan.color,
-                    color: colors.white
-                  }}
-                >
-                  MOST POPULAR
-                </div>
-              )}
-              
-              <div className="p-8">
-                <div className="mb-8">
-                  <h3 className="text-2xl font-bold mb-2" style={{ color: colors.textPrimary }}>
-                    {plan.name}
-                  </h3>
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-4xl font-bold" style={{ color: colors.textPrimary }}>
-                      {plan.price}
-                    </span>
-                    <span className="text-lg opacity-70" style={{ color: colors.textSecondary }}>
-                      {plan.period}
-                    </span>
-                  </div>
-                </div>
-                
-                <ul className="space-y-4 mb-8">
-                  {plan.features.map((feature, idx) => (
-                    <li key={idx} className="flex items-center gap-3">
-                      <CheckCircle size={18} style={{ color: colors.primary }} />
-                      <span className="font-medium" style={{ color: colors.textSecondary }}>{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-                
-                <NavLink 
-                  to="/subscribe"
-                  className="block w-full py-4 rounded-xl font-semibold text-center transition-all duration-300 
-                           hover:scale-105 hover:shadow-lg active:scale-95"
-                  style={{ 
-                    backgroundColor: plan.popular ? plan.color : `${colors.primary}10`,
-                    color: plan.popular ? colors.white : colors.primary
-                  }}
-                >
-                  {plan.popular ? 'Get Started' : 'Choose Plan'}
-                </NavLink>
-              </div>
-            </div>
+            <SubscriptionPlanCard key={index} plan={plan} colors={colors} />
           ))}
         </div>
       </section>
 
-      {/* Why Choose Us Section */}
       <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto py-20">
         <div className="rounded-3xl p-8 lg:p-16 overflow-hidden"
           style={{ 
@@ -477,30 +455,12 @@ const AboutApp = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {whyChooseUs.map((item, index) => (
-              <div 
-                key={index}
-                className="group p-6 rounded-2xl transition-all duration-300 hover:scale-105 hover:shadow-xl"
-                style={{ 
-                  backgroundColor: colors.white,
-                  border: `1px solid ${colors.border}20`
-                }}
-              >
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="p-3 rounded-xl transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12"
-                    style={{ backgroundColor: `${colors.primary}10`, color: colors.primary }}
-                  >
-                    {item.icon}
-                  </div>
-                  <h3 className="text-xl font-bold" style={{ color: colors.textPrimary }}>{item.title}</h3>
-                </div>
-                <p className="text-sm opacity-80" style={{ color: colors.textSecondary }}>{item.description}</p>
-              </div>
+              <WhyChooseUsCard key={index} item={item} colors={colors} />
             ))}
           </div>
 
-          {/* Dashboard Preview */}
           <div className="mt-16 relative">
-            <div className="absolute inset-0 rounded-3xl opacity-10 blur-xl"
+            <div className="absolute inset-0 rounded-3xl opacity-10 blur-xl pointer-events-none"
               style={{ backgroundColor: colors.primary }}
             ></div>
             <div className="relative bg-white/50 backdrop-blur-sm rounded-3xl p-8 border"
@@ -529,7 +489,6 @@ const AboutApp = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
       <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto py-2">
         <div className="rounded-3xl p-8 lg:p-16 text-center relative overflow-hidden"
           style={{ 
@@ -574,8 +533,7 @@ const AboutApp = () => {
             </div>
           </div>
           
-          {/* Decorative elements */}
-          <div className="absolute top-0 left-0 w-full h-full opacity-10">
+          <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
             <div className="absolute top-10 left-10 w-20 h-20 rounded-full" style={{ backgroundColor: 'white' }}></div>
             <div className="absolute bottom-10 right-10 w-32 h-32 rounded-full" style={{ backgroundColor: 'white' }}></div>
           </div>
@@ -584,8 +542,7 @@ const AboutApp = () => {
 
       <Footer />
 
-      {/* CSS Animations */}
-      <style jsx>{`
+      <style>{`
         @keyframes float {
           0%, 100% { transform: translateY(0px); }
           50% { transform: translateY(-10px); }
@@ -598,4 +555,4 @@ const AboutApp = () => {
   );
 };
 
-export default AboutApp;
+export default memo(AboutApp);

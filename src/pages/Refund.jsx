@@ -1,17 +1,51 @@
-import React from 'react';
+import React, { useMemo, memo } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import Footer from '../components/Footer';
 import { 
   DollarSign, XCircle, Clock, AlertTriangle, Headphones, 
-  Scale, FileText, Shield, CheckCircle, Mail, ChevronRight,
-  Calendar, BookOpen, CreditCard, Smartphone, ArrowRight
+  Scale, FileText, Shield, CheckCircle, Mail,
+  Calendar, BookOpen, CreditCard
 } from 'lucide-react';
 import img8 from '../assets/new/img8.png'
+
+const NonRefundableItemCard = memo(({ item, colors }) => (
+  <div 
+    className="group p-6 shadow hover:shadow-2xl rounded-2xl transition-all duration-300 hover:scale-105 will-change-transform"
+    style={{ 
+      backgroundColor: 'rgba(255, 255, 255, 0.9)',
+      border: `1px solid ${colors.border}20`,
+      backdropFilter: 'blur(10px)'
+    }}
+  >
+    <div className="w-14 h-14 rounded-xl mb-6 flex items-center justify-center transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12"
+      style={{ 
+        backgroundColor: `${item.color}15`,
+        color: item.color
+      }}
+    >
+      {item.icon}
+    </div>
+    <h3 className="text-xl font-bold mb-2" style={{ color: colors.textPrimary }}>
+      {item.title}
+    </h3>
+    <p className="text-sm opacity-80" style={{ color: colors.textSecondary }}>
+      {item.description}
+    </p>
+  </div>
+));
+
+const NonRefundableCaseItem = memo(({ item, colors }) => (
+  <div className="flex items-start gap-3 p-4 rounded-xl"
+    style={{ backgroundColor: colors.white }}>
+    <XCircle size={18} className="mt-1 flex-shrink-0" style={{ color: '#EF4444' }} />
+    <span className="font-medium" style={{ color: colors.textSecondary }}>{item}</span>
+  </div>
+));
 
 const Refund = () => {
   const { colors } = useTheme();
 
-  const nonRefundableItems = [
+  const nonRefundableItems = useMemo(() => [
     {
       icon: <BookOpen size={20} />,
       title: 'Online Courses',
@@ -36,15 +70,15 @@ const Refund = () => {
       description: 'All other paid services',
       color: '#F59E0B'
     }
-  ];
+  ], [colors.primary, colors.secondary]);
 
-  const nonRefundableCases = [
+  const nonRefundableCases = useMemo(() => [
     'Change of mind after purchase',
     'Accidental or incorrect purchase',
     'Dissatisfaction with content',
     'Technical issues on user side',
     'Non-usage or incomplete usage'
-  ];
+  ], []);
 
   return (
     <div className="w-full min-h-screen overflow-x-hidden" style={{ backgroundColor: colors.white }}>
@@ -131,7 +165,8 @@ const Refund = () => {
                   <img 
                     src={img8} 
                     alt="Refund Policy" 
-                    className="w-full h-auto object-contain transition-transform duration-700 hover:scale-105"
+                    className="w-full h-auto object-contain transition-transform duration-700 hover:scale-105 will-change-transform"
+                    loading="lazy"
                     style={{
                       filter: 'drop-shadow(0 25px 50px rgba(0,0,0,0.15))',
                       maxHeight: '500px'
@@ -139,7 +174,6 @@ const Refund = () => {
                   />
                 </div>
                 
-                {/* Floating Elements */}
                 <div className="absolute top-4 left-4 w-16 h-16 rounded-2xl flex items-center justify-center"
                   style={{ 
                     backgroundColor: colors.white,
@@ -158,11 +192,10 @@ const Refund = () => {
                 </div>
               </div>
               
-              {/* Background Blur Effects */}
-              <div className="absolute -top-10 -right-10 w-64 h-64 rounded-full opacity-20 blur-3xl"
+              <div className="absolute -top-10 -right-10 w-64 h-64 rounded-full opacity-20 blur-3xl pointer-events-none"
                 style={{ backgroundColor: colors.primary }}
               ></div>
-              <div className="absolute -bottom-10 -left-10 w-64 h-64 rounded-full opacity-20 blur-3xl"
+              <div className="absolute -bottom-10 -left-10 w-64 h-64 rounded-full opacity-20 blur-3xl pointer-events-none"
                 style={{ backgroundColor: colors.secondary }}
               ></div>
             </div>
@@ -210,35 +243,11 @@ const Refund = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {nonRefundableItems.map((item, index) => (
-            <div 
-              key={index}
-              className="group p-6 shadow hover:shadow-2xl rounded-2xl transition-all duration-300 hover:scale-105"
-              style={{ 
-                backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                border: `1px solid ${colors.border}20`,
-                backdropFilter: 'blur(10px)'
-              }}
-            >
-              <div className="w-14 h-14 rounded-xl mb-6 flex items-center justify-center transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12"
-                style={{ 
-                  backgroundColor: `${item.color}15`,
-                  color: item.color
-                }}
-              >
-                {item.icon}
-              </div>
-              <h3 className="text-xl font-bold mb-2" style={{ color: colors.textPrimary }}>
-                {item.title}
-              </h3>
-              <p className="text-sm opacity-80" style={{ color: colors.textSecondary }}>
-                {item.description}
-              </p>
-            </div>
+            <NonRefundableItemCard key={index} item={item} colors={colors} />
           ))}
         </div>
       </section>
 
-      {/* Non-Refundable Cases */}
       <section className="px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto pb-16">
         <div className="p-8 rounded-2xl"
           style={{ 
@@ -256,11 +265,7 @@ const Refund = () => {
           
           <div className="space-y-4">
             {nonRefundableCases.map((item, index) => (
-              <div key={index} className="flex items-start gap-3 p-4 rounded-xl"
-                style={{ backgroundColor: colors.white }}>
-                <XCircle size={18} className="mt-1 flex-shrink-0" style={{ color: '#EF4444' }} />
-                <span className="font-medium" style={{ color: colors.textSecondary }}>{item}</span>
-              </div>
+              <NonRefundableCaseItem key={index} item={item} colors={colors} />
             ))}
           </div>
         </div>
@@ -392,4 +397,4 @@ const Refund = () => {
   );
 };
 
-export default Refund;
+export default memo(Refund);

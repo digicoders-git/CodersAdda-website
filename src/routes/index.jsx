@@ -13,6 +13,7 @@ export const routes = [
   {path: "/about-us", element: <AboutUs />, name: "About Us",},
   {path: "/privacy", element: <Privacy />, name: "Privacy and Policy",},
   {path: "/terms", element: <Terms />, name: "Terms and Condition",},
+  {path: "/refund", element: <Refund />, name: "Terms and Condition",},
   {path: "/disclaimer", element: <Disclaimer />, name: "Disclaimer",},
   {path: "/download", element: <DownloadApp />, name: "Download",},
 ];
