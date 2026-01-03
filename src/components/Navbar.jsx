@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { NavLink, useLocation } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
-import { Menu, X, Download } from 'lucide-react';
+import { Menu, X, Download, ChevronRight } from 'lucide-react';
 
 const Navbar = () => {
   const { colors } = useTheme();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const location = useLocation();
 
   const navLinks = [
     { title: 'Home', path: '/' },
@@ -17,159 +19,279 @@ const Navbar = () => {
     { title: 'Disclaimer', path: '/disclaimer' }
   ];
 
+  // Handle scroll effect
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Close menu on route change
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [location]);
+
+  // Prevent body scroll when menu is open
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isMenuOpen]);
+
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
   return (
     <>
+      {/* Main Navbar with Gradient Background */}
       <nav 
-        className="flex justify-between items-center px-4 sm:px-6 lg:px-[5%] py-3 fixed w-full top-0 left-0 z-[1000] shadow-sm transition-all"
-        style={{ backgroundColor: colors.white }}
+        className={`fixed w-full top-0 left-0 z-50 transition-all duration-300 ${
+          isScrolled ? 'py-3 shadow-xl' : 'py-4'
+        }`}
+        style={{ 
+          backgroundColor: colors.white,
+          borderBottom: `1px solid ${colors.border}20`,
+          backdropFilter: 'blur(10px)',
+        }}
       >
-        {/* Logo */}
-        <div 
-          className="text-2xl font-bold flex items-center cursor-pointer"
-          style={{ color: colors.primary }}
-        >
-          CodersAdda.
-        </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center">
+            
+            {/* Logo Section */}
+            <div className="flex items-center gap-3">
+              {/* <div className="relative">
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center"
+                  style={{ 
+                    background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 100%)`,
+                    boxShadow: `0 4px 20px ${colors.primary}30`
+                  }}
+                >
+                  <span className="text-xl font-bold text-white">C</span>
+                </div>
+              </div> */}
+              <div 
+                className="text-xl font-bold cursor-pointer"
+                style={{ 
+                  background: `linear-gradient(135deg, ${colors.textPrimary} 0%, ${colors.primary} 100%)`,
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                }}
+              >
+                CodersAdda
+              </div>
+            </div>
 
-        {/* Desktop Navigation Links */}
-        <div className="hidden lg:flex gap-8 items-center">
-          {navLinks.map((link, index) => (
-            <NavLink 
-              key={index}
-              to={link.path}
-              className="no-underline font-medium text-[0.95rem] transition-colors relative group"
-              style={({ isActive }) => ({
-                color: isActive ? colors.primary : colors.textSecondary
-              })}
+            {/* Desktop Navigation */}
+            <div className="hidden lg:flex items-center gap-2">
+              {navLinks.map((link, index) => (
+                <NavLink 
+                  key={index}
+                  to={link.path}
+                  className={({ isActive }) => 
+                    `relative px-5 py-2.5 rounded-lg font-medium text-sm transition-all duration-300 
+                    group ${isActive ? '' : 'hover:scale-105'}`
+                  }
+                  style={({ isActive }) => ({
+                    color: isActive ? colors.primary : colors.textSecondary,
+                  })}
+                >
+                  <span className="relative z-10">
+                    {link.title}
+                  </span>
+                  
+                  {/* Hover & Active Background Effect - Same for both */}
+                  <div className={`absolute inset-0 rounded-lg transition-all duration-300 ${
+                    location.pathname === link.path ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+                  }`}
+                    style={{ 
+                      backgroundColor: colors.primary + '15',
+                      boxShadow: `inset 0 0 0 1px ${colors.primary}30`
+                    }}
+                  ></div>
+                  
+                  {/* Active Indicator Dot */}
+                  {location.pathname === link.path && (
+                    <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full"
+                      style={{ 
+                        backgroundColor: colors.primary,
+                      }}
+                    ></div>
+                  )}
+                </NavLink>
+              ))}
+            </div>
+
+            {/* Desktop CTA & Mobile Menu Button */}
+            <div className="flex items-center gap-4">
+              {/* Desktop Download Button */}
+              <NavLink 
+                to="/download"
+                className="hidden lg:flex items-center gap-2 px-6 py-2.5 rounded-lg font-semibold 
+                         transition-all duration-300 hover:scale-105 active:scale-95 
+                         group relative overflow-hidden"
+                style={{ 
+                  background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 100%)`,
+                  color: colors.white,
+                }}
+              >
+                <Download size={18} className="relative z-10" />
+                <span className="relative z-10">Download App</span>
+              </NavLink>
+
+              {/* Mobile Menu Button */}
+              <button 
+                onClick={toggleMenu}
+                className="lg:hidden w-10 h-10 rounded-lg flex items-center justify-center 
+                         transition-all duration-300 hover:scale-110 active:scale-95"
+                style={{ 
+                  backgroundColor: colors.border + '20',
+                  color: colors.textPrimary
+                }}
+              >
+                {isMenuOpen ? <X size={22} /> : <Menu size={22} />}
+              </button>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* Mobile Menu Overlay - Fixed Height */}
+      <div 
+        className={`fixed inset-0 z-40 lg:hidden transition-all duration-300 ${
+          isMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'
+        }`}
+        style={{ 
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        }}
+        onClick={toggleMenu}
+      />
+
+      {/* Mobile Menu Panel - Fixed Height */}
+      <div 
+        className={`fixed top-0 right-0 h-full w-full max-w-full z-50 lg:hidden 
+                   transition-transform duration-300 ease-out overflow-y-auto ${
+          isMenuOpen ? 'translate-x-0' : 'translate-x-full'
+        }`}
+        style={{ 
+          backgroundColor: colors.white,
+          boxShadow: '-4px 0 20px rgba(0,0,0,0.1)'
+        }}
+      >
+        {/* Mobile Menu Header */}
+        <div className="sticky w-full top-0 z-10 flex justify-between items-center p-5 border-b"
+          style={{ 
+            backgroundColor: colors.white,
+            borderColor: colors.border + '20'
+          }}>
+          <div className="flex items-center gap-3">
+            {/* <div className="w-10 h-10 rounded-xl flex items-center justify-center"
+              style={{ 
+                background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 100%)`,
+              }}
             >
-              {link.title}
-              {/* Hover underline effect */}
-              <span 
-                className="absolute bottom-0 left-0 w-0 h-0.5 group-hover:w-full transition-all duration-300"
-                style={{ backgroundColor: colors.primary }}
-              />
-            </NavLink>
-          ))}
-        </div>
-
-        {/* Desktop Button & Mobile Download Button */}
-        <div className="flex items-center gap-4">
-          {/* Mobile Download Button - Always Visible */}
+              <span className="text-xl font-bold text-white">C</span>
+            </div> */}
+            <div 
+              className="text-xl font-bold"
+              style={{ 
+                background: `linear-gradient(135deg, ${colors.textPrimary} 0%, ${colors.primary} 100%)`,
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+              }}
+            >
+              CodersAdda
+            </div>
+          </div>
           <button 
-            className="lg:hidden px-4 py-2 rounded-lg border-[1.5px] bg-transparent font-semibold cursor-pointer transition-all flex items-center gap-2 hover:shadow-md"
+            onClick={toggleMenu}
+            className="w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110"
             style={{ 
-              borderColor: colors.primary, 
-              color: colors.primary 
-            }}
-            onMouseOver={(e) => {
-              e.target.style.backgroundColor = colors.outlineHover;
-            }}
-            onMouseOut={(e) => {
-              e.target.style.backgroundColor = 'transparent';
+              backgroundColor: colors.border + '20',
+              color: colors.textPrimary
             }}
           >
-            <Download size={18} />
-            <span className="hidden xs:inline">Download</span>
+            <X size={22} />
           </button>
+        </div>
 
-          {/* Desktop Download Button */}
-          <button 
-            className="hidden lg:flex px-6 py-2.5 rounded-lg border-[1.5px] bg-transparent font-semibold cursor-pointer transition-all items-center gap-2 hover:shadow-md"
+        {/* Mobile Navigation Content */}
+        <div className="p-5">
+          {/* Mobile Download CTA */}
+          <NavLink 
+            to="/download"
+            onClick={toggleMenu}
+            className="w-full flex items-center justify-center gap-2 py-3.5 rounded-lg font-semibold mb-6
+                     transition-all duration-300 active:scale-95"
             style={{ 
-              borderColor: colors.primary, 
-              color: colors.primary 
-            }}
-            onMouseOver={(e) => {
-              e.target.style.backgroundColor = colors.outlineHover;
-            }}
-            onMouseOut={(e) => {
-              e.target.style.backgroundColor = 'transparent';
+              background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 100%)`,
+              color: colors.white,
             }}
           >
             <Download size={18} />
             Download App
-          </button>
+          </NavLink>
 
-          {/* Mobile Menu Button */}
-          <button 
-            className="lg:hidden w-10 h-10 flex items-center justify-center rounded-md transition-all"
-            onClick={toggleMenu}
-            style={{ 
-              color: colors.textSecondary,
-              backgroundColor: isMenuOpen ? colors.outlineHover : 'transparent'
-            }}
-          >
-            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
-        </div>
-      </nav>
-
-      {/* Mobile Menu Overlay */}
-      <div 
-        className={`fixed inset-0 z-[999] transition-all duration-300 lg:hidden ${
-          isMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
-        }`}
-        style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
-        onClick={() => setIsMenuOpen(false)}
-      />
-
-      {/* Mobile Menu Panel */}
-      <div 
-        className={`fixed top-0 right-0 h-full w-80 max-w-full z-[1000] transition-transform duration-300 ease-in-out lg:hidden
-          ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}
-        style={{ 
-          backgroundColor: colors.white,
-          boxShadow: '-2px 0 20px rgba(0, 0, 0, 0.1)'
-        }}
-      >
-        {/* Mobile Menu Header */}
-        <div className="flex justify-between items-center p-6 border-b"
-          style={{ borderColor: colors.border }}>
-          <div 
-            className="text-2xl font-bold"
-            style={{ color: colors.primary }}
-          >
-            CodersAdda.
-          </div>
-          <button 
-            onClick={toggleMenu}
-            className="w-10 h-10 flex items-center justify-center rounded-md transition-all hover:bg-gray-100"
-          >
-            <X size={24} style={{ color: colors.textSecondary }} />
-          </button>
-        </div>
-
-        {/* Mobile Navigation Links */}
-        <div className="p-6">
+          {/* Mobile Navigation Links */}
           <div className="space-y-1">
+            <p className="text-xs font-semibold uppercase tracking-wider mb-3 px-2 opacity-60"
+               style={{ color: colors.textSecondary }}>
+              Menu
+            </p>
             {navLinks.map((link, index) => (
               <NavLink 
                 key={index}
                 to={link.path}
-                onClick={() => setIsMenuOpen(false)}
-                className="block no-underline font-medium py-3 px-4 rounded-lg transition-all"
+                onClick={toggleMenu}
+                className={({ isActive }) => 
+                  `block relative py-3 px-4 rounded-lg transition-all duration-300 active:scale-95 ${
+                    isActive ? '' : 'hover:bg-gray-50'
+                  }`
+                }
                 style={({ isActive }) => ({
                   color: isActive ? colors.primary : colors.textSecondary,
-                  backgroundColor: isActive ? colors.outlineHover : 'transparent'
                 })}
               >
-                {link.title}
+                <div className="flex items-center justify-between">
+                  <span className="font-medium">{link.title}</span>
+                  {location.pathname === link.path && (
+                    <div className="w-2 h-2 rounded-full"
+                      style={{ backgroundColor: colors.primary }}
+                    ></div>
+                  )}
+                </div>
+                
+                {/* Hover & Active Background Effect - Same for both */}
+                <div className={`absolute inset-0 rounded-lg transition-all duration-300 ${
+                  location.pathname === link.path ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+                }`}
+                  style={{ 
+                    backgroundColor: colors.primary + '15',
+                  }}
+                ></div>
               </NavLink>
             ))}
           </div>
 
-          {/* Additional Info for Mobile */}
-          {/* <div className="mt-8 pt-6 border-t" style={{ borderColor: colors.border }}>
-            <p className="text-sm text-center" style={{ color: colors.textSecondary }}>
+          {/* Mobile Menu Footer */}
+          <div className="mt-8 pt-6 border-t text-center"
+            style={{ borderColor: colors.border + '20' }}>
+            <p className="text-sm opacity-70 mb-4" style={{ color: colors.textSecondary }}>
               Start your learning journey today
             </p>
-          </div> */}
+          </div>
         </div>
       </div>
+
+      {/* Spacer for fixed navbar - Reduced Height */}
+      <div className="h-16"></div>
     </>
   );
 };

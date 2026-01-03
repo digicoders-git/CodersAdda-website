@@ -25,7 +25,7 @@ const Header = () => {
   ];
 
   return (
-    <header className="relative mt-10 md:mt-1 lg:-mt-1 overflow-hidden" style={{ backgroundColor: colors.white }}>
+    <header className="relative -mt-5 md:-mt-5 lg:-mt-1 overflow-hidden" style={{ backgroundColor: colors.white }}>
       {/* Animated Background Gradient */}
       <div className="absolute inset-0 z-0 overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-white via-white to-blue-50/30"></div>
