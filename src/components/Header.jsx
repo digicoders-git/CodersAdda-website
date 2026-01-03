@@ -228,7 +228,7 @@ const Header = () => {
                 </div>
               </div>
 
-              <div className="absolute -bottom-4 -right-4 w-20 h-20 rounded-2xl p-3 shadow-lg z-20 animate-float"
+              <div className="absolute -bottom-4 -right-0 w-20 h-20 rounded-2xl p-3 shadow-lg z-20 animate-float"
                 style={{ 
                   backgroundColor: colors.white,
                   animationDelay: '1s'
@@ -241,7 +241,7 @@ const Header = () => {
                 </div>
               </div>
 
-              <div className="absolute top-1/4 -right-6 w-18 h-18 rounded-2xl p-3 shadow-lg z-20 animate-float"
+              <div className="absolute top-0 -right-0 w-18 h-18 rounded-2xl p-3 shadow-lg z-20 animate-float"
                 style={{ 
                   backgroundColor: colors.white,
                   animationDelay: '1.5s'

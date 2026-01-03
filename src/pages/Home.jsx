@@ -202,10 +202,10 @@ const CourseCard = memo(({ course, colors }) => (
             ))}
             <span className="text-sm font-semibold ml-1" style={{ color: colors.textPrimary }}>{course.rating}</span>
           </div>
-          <div className="flex items-center gap-1 text-sm opacity-60" style={{ color: colors.textSecondary }}>
+          {/* <div className="flex items-center gap-1 text-sm opacity-60" style={{ color: colors.textSecondary }}>
             <Clock size={14} />
             <span>{course.duration}</span>
-          </div>
+          </div> */}
         </div>
       </div>
       
@@ -227,11 +227,11 @@ const CourseCard = memo(({ course, colors }) => (
             <span className="text-sm font-semibold" style={{ color: colors.textPrimary }}>{course.author}</span>
           </div>
         </div>
-        <button className="p-2 rounded-full transition-all hover:scale-110"
+        {/* <button className="p-2 rounded-full transition-all hover:scale-110"
           style={{ backgroundColor: `${colors.primary}10` }}
         >
           <Play size={16} style={{ color: colors.primary }} />
-        </button>
+        </button> */}
       </div>
     </div>
   </div>
@@ -252,22 +252,22 @@ const CategoryCard = memo(({ cat, colors }) => (
       >
         <img src={cat.icon} alt={cat.title} className="w-12 h-12 object-contain" loading="lazy" />
       </div>
-      <div className="text-right">
+      {/* <div className="text-right">
         <div className="text-2xl font-bold" style={{ color: colors.primary }}>{cat.courses}</div>
         <div className="text-sm opacity-60" style={{ color: colors.textSecondary }}>Courses</div>
-      </div>
+      </div> */}
     </div>
     
     <h3 className="text-xl font-bold mb-3" style={{ color: colors.textPrimary }}>{cat.title}</h3>
     <p className="text-sm leading-relaxed mb-6 opacity-80" style={{ color: colors.textSecondary }}>{cat.desc}</p>
-    
+{/*     
     <div className="flex items-center justify-between pt-6 border-t" style={{ borderColor: `${colors.border}30` }}>
       <div className="flex items-center gap-2 text-sm">
         <Users size={16} className="opacity-60" />
         <span className="font-semibold" style={{ color: colors.textPrimary }}>{cat.students}</span>
         <span className="opacity-60" style={{ color: colors.textSecondary }}>students</span>
       </div>
-    </div>
+    </div> */}
   </div>
 ));
 
@@ -289,7 +289,7 @@ const PopularCourseCard = memo(({ course, colors }) => (
       <div className="flex-1">
         <div className="flex justify-between items-start mb-3">
           <h3 className="text-xl font-bold" style={{ color: colors.textPrimary }}>{course.title}</h3>
-          <div className="text-lg font-bold" style={{ color: colors.primary }}>{course.price}</div>
+          {/* <div className="text-lg font-bold" style={{ color: colors.primary }}>{course.price}</div> */}
         </div>
         <p className="text-sm leading-relaxed mb-6 opacity-80" style={{ color: colors.textSecondary }}>{course.desc}</p>
         
@@ -299,10 +299,10 @@ const PopularCourseCard = memo(({ course, colors }) => (
               <Star size={16} fill={colors.primary} style={{ color: colors.primary }} />
               <span className="text-sm font-semibold" style={{ color: colors.textPrimary }}>{course.rating}/5</span>
             </div>
-            <div className="flex items-center gap-1 text-sm opacity-70" style={{ color: colors.textSecondary }}>
+            {/* <div className="flex items-center gap-1 text-sm opacity-70" style={{ color: colors.textSecondary }}>
               <Clock size={16} />
               <span>{course.duration}</span>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
@@ -330,8 +330,8 @@ const BlogCard = memo(({ blog, colors }) => (
     <div className="p-6">
       <div className="flex items-center gap-4 text-sm opacity-60 mb-4" style={{ color: colors.textSecondary }}>
         <span>{blog.date}</span>
-        <span>•</span>
-        <span>{blog.readTime} read</span>
+        {/* <span>•</span>
+        <span>{blog.readTime} read</span> */}
       </div>
       <h3 className="text-xl font-bold mb-4" style={{ color: colors.textPrimary }}>{blog.title}</h3>
       <p className="text-sm leading-relaxed mb-6 opacity-80" style={{ color: colors.textSecondary }}>{blog.desc}</p>

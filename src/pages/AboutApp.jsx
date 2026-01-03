@@ -1,12 +1,17 @@
-import React, { useState, useEffect, useMemo, memo } from 'react';
+import React, { useState, useEffect, useMemo, memo, useRef } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import Footer from '../components/Footer';
 import Lottie from 'lottie-react';
 import softwareAnimation from '../animtedSVG/Software.json';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 import { 
   Smartphone, BookOpen, Users, Target, Video, FileText, Briefcase, 
   PlayCircle, TrendingUp, CheckCircle, Download, Sparkles,
-  Award, Clock, Zap, ArrowRight, Layers
+  Award, Clock, Zap, ArrowRight, Layers, ChevronLeft, ChevronRight
 } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 
@@ -71,7 +76,7 @@ const FeatureCard = memo(({ feature, colors }) => (
 
 const SubscriptionPlanCard = memo(({ plan, colors }) => (
   <div 
-    className={`relative shadow rounded-3xl overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-2xl will-change-transform ${
+    className={`relative shadow rounded-2xl overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-2xl will-change-transform ${
       plan.popular ? 'border-2' : 'border'
     }`}
     style={{ 
@@ -81,7 +86,7 @@ const SubscriptionPlanCard = memo(({ plan, colors }) => (
     }}
   >
     {plan.popular && (
-      <div className="absolute top-0 right-0 px-6 py-2 rounded-bl-2xl font-bold text-sm"
+      <div className="absolute top-0 right-0 px-4 py-1 rounded-bl-xl font-bold text-xs"
         style={{ 
           backgroundColor: plan.color,
           color: colors.white
@@ -91,33 +96,33 @@ const SubscriptionPlanCard = memo(({ plan, colors }) => (
       </div>
     )}
     
-    <div className="p-8">
-      <div className="mb-8">
-        <h3 className="text-2xl font-bold mb-2" style={{ color: colors.textPrimary }}>
+    <div className="p-5">
+      <div className="mb-5">
+        <h3 className="text-lg font-bold mb-1" style={{ color: colors.textPrimary }}>
           {plan.name}
         </h3>
         <div className="flex items-baseline gap-1">
-          <span className="text-4xl font-bold" style={{ color: colors.textPrimary }}>
+          <span className="text-2xl font-bold" style={{ color: colors.textPrimary }}>
             {plan.price}
           </span>
-          <span className="text-lg opacity-70" style={{ color: colors.textSecondary }}>
+          <span className="text-sm opacity-70" style={{ color: colors.textSecondary }}>
             {plan.period}
           </span>
         </div>
       </div>
       
-      <ul className="space-y-4 mb-8">
+      <ul className="space-y-2 mb-5">
         {plan.features.map((feature, idx) => (
-          <li key={idx} className="flex items-center gap-3">
-            <CheckCircle size={18} style={{ color: colors.primary }} />
-            <span className="font-medium" style={{ color: colors.textSecondary }}>{feature}</span>
+          <li key={idx} className="flex items-center gap-2">
+            <CheckCircle size={14} style={{ color: colors.primary }} />
+            <span className="text-xs font-medium" style={{ color: colors.textSecondary }}>{feature}</span>
           </li>
         ))}
       </ul>
       
       <NavLink 
         to="/subscribe"
-        className="block w-full py-4 rounded-xl font-semibold text-center transition-all duration-300 
+        className="block w-full py-2.5 rounded-lg font-semibold text-sm text-center transition-all duration-300 
                  hover:scale-105 hover:shadow-lg active:scale-95"
         style={{ 
           backgroundColor: plan.popular ? plan.color : `${colors.primary}10`,
@@ -153,6 +158,7 @@ const WhyChooseUsCard = memo(({ item, colors }) => (
 const AboutApp = () => {
   const { colors } = useTheme();
   const [scrollY, setScrollY] = useState(0);
+  const swiperRef = useRef(null);
 
   useEffect(() => {
     let ticking = false;
@@ -210,20 +216,52 @@ const AboutApp = () => {
 
   const subscriptionPlans = useMemo(() => [
     {
-      name: 'Monthly Plan',
-      price: '$19',
+      name: 'Basic Plan',
+      price: '₹499',
       period: '/month',
-      features: ['All Premium Courses', 'E-Book Library Access', 'Job Portal Access', 'Learning Reels'],
+      features: ['Access to 50+ Courses', 'Basic E-Books', 'Community Access', 'Email Support'],
+      popular: false,
+      color: '#6366F1'
+    },
+    {
+      name: 'Monthly Plan',
+      price: '₹999',
+      period: '/month',
+      features: ['All Premium Courses', 'E-Book Library Access', 'Job Portal Access', 'Learning Reels', 'Priority Support'],
       popular: false,
       color: colors.primary
     },
     {
+      name: 'Quarterly Plan',
+      price: '₹2,499',
+      period: '/3 months',
+      features: ['Everything in Monthly', 'Save 15%', 'Live Webinars', 'Project Reviews', 'Career Guidance'],
+      popular: false,
+      color: '#8B5CF6'
+    },
+    {
       name: 'Yearly Plan',
-      price: '$199',
+      price: '₹8,999',
       period: '/year',
-      features: ['Everything in Monthly', 'Save 15%', 'Priority Support', 'Certificate Access', 'Community Access'],
+      features: ['Everything in Quarterly', 'Save 25%', 'Priority Support', 'Certificate Access', 'Community Access', '1-on-1 Mentorship'],
       popular: true,
       color: colors.secondary
+    },
+    {
+      name: 'Lifetime Plan',
+      price: '₹24,999',
+      period: '/lifetime',
+      features: ['All Future Courses', 'Lifetime Access', 'All Resources', 'Premium Support', 'Exclusive Content', 'Career Services'],
+      popular: false,
+      color: '#10B981'
+    },
+    {
+      name: 'Enterprise Plan',
+      price: 'Custom',
+      period: '',
+      features: ['Team Access (10+ users)', 'Custom Learning Paths', 'Dedicated Support', 'Analytics Dashboard', 'API Access', 'Training Sessions'],
+      popular: false,
+      color: '#F59E0B'
     }
   ], [colors.primary, colors.secondary]);
 
@@ -420,8 +458,8 @@ const AboutApp = () => {
         </div>
       </section>
 
-      <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto py-2">
-        <div className="text-center mb-16">
+      <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto py-2 ">
+        <div className="text-center mb-12">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6" style={{ color: colors.textPrimary }}>
             Flexible <span style={{ color: colors.primary }}>Subscription</span> Plans
           </h2>
@@ -430,10 +468,67 @@ const AboutApp = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-4xl mx-auto">
-          {subscriptionPlans.map((plan, index) => (
-            <SubscriptionPlanCard key={index} plan={plan} colors={colors} />
-          ))}
+        <div className="relative">
+          {/* Navigation Buttons */}
+          <div className="flex justify-end gap-3 mb-6">
+            <button
+              onClick={() => swiperRef.current?.slidePrev()}
+              className="p-3 rounded-xl transition-all duration-300 hover:scale-110 active:scale-95 shadow-lg"
+              style={{ 
+                backgroundColor: colors.white,
+                border: `2px solid ${colors.primary}20`
+              }}
+            >
+              <ChevronLeft size={24} style={{ color: colors.primary }} />
+            </button>
+            <button
+              onClick={() => swiperRef.current?.slideNext()}
+              className="p-3 rounded-xl transition-all duration-300 hover:scale-110 active:scale-95 shadow-lg"
+              style={{ 
+                backgroundColor: colors.primary,
+                border: `2px solid ${colors.primary}`
+              }}
+            >
+              <ChevronRight size={24} style={{ color: colors.white }} />
+            </button>
+          </div>
+
+          {/* Swiper Slider */}
+          <Swiper
+            modules={[Navigation, Pagination, Autoplay]}
+            spaceBetween={24}
+            slidesPerView={1}
+            onSwiper={(swiper) => (swiperRef.current = swiper)}
+            pagination={{ 
+              clickable: true,
+              dynamicBullets: true
+            }}
+            autoplay={{
+              delay: 4000,
+              disableOnInteraction: false,
+            }}
+            breakpoints={{
+              640: {
+                slidesPerView: 1,
+                spaceBetween: 20,
+              },
+              768: {
+                slidesPerView: 2,
+                spaceBetween: 24,
+              },
+              1024: {
+                slidesPerView: 3,
+                spaceBetween: 24,
+              },
+            }}
+            className="pb-12 lg:h-[400px]"
+          >
+            {subscriptionPlans.map((plan, index) => (
+              <SwiperSlide key={index}>
+                <SubscriptionPlanCard plan={plan} colors={colors} />
+              </SwiperSlide>
+            ))}
+          </Swiper>
         </div>
       </section>
 
@@ -489,7 +584,7 @@ const AboutApp = () => {
         </div>
       </section>
 
-      <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto py-2">
+      {/* <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto py-2">
         <div className="rounded-3xl p-8 lg:p-16 text-center relative overflow-hidden"
           style={{ 
             background: `linear-gradient(135deg, ${colors.primary}, ${colors.secondary})`,
@@ -538,7 +633,7 @@ const AboutApp = () => {
             <div className="absolute bottom-10 right-10 w-32 h-32 rounded-full" style={{ backgroundColor: 'white' }}></div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       <Footer />
 

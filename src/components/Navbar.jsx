@@ -76,10 +76,6 @@ const Navbar = () => {
     { title: 'Home', path: '/' },
     { title: 'About App', path: '/about-app' },
     { title: 'About Us', path: '/about-us' },
-    { title: 'Privacy', path: '/privacy' },
-    { title: 'Terms', path: '/terms' },
-    { title: 'Refund', path: '/refund' },
-    { title: 'Disclaimer', path: '/disclaimer' }
   ], []);
 
   useEffect(() => {

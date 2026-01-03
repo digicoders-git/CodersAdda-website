@@ -367,7 +367,7 @@ const AboutUs = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto py-10">
+      {/* <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto py-10">
         <div className="rounded-3xl p-8 lg:p-12 text-center relative overflow-hidden"
           style={{ 
             background: `linear-gradient(135deg, ${colors.primary}, ${colors.secondary})`,
@@ -412,7 +412,7 @@ const AboutUs = () => {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       <Footer />
     </div>
