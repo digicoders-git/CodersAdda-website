@@ -159,7 +159,8 @@ const Navbar = () => {
                          transition-all duration-300 hover:scale-105 active:scale-95 
                          group relative overflow-hidden"
                 style={{ 
-                  background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 100%)`,
+                  // background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 100%)`,
+                  background: colors.primary,
                   color: colors.white,
                 }}
               >

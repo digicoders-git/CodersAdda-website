@@ -397,7 +397,7 @@ const DownloadApp = () => {
         </div>
       </section>
 
-      <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto pb-20">
+      {/* <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto pb-20">
         <div className="rounded-3xl p-8 lg:p-16 text-center relative overflow-hidden"
           style={{ 
             background: `linear-gradient(135deg, ${colors.primary}, ${colors.secondary})`,
@@ -440,7 +440,7 @@ const DownloadApp = () => {
             <div className="absolute bottom-10 right-10 w-32 h-32 rounded-full" style={{ backgroundColor: 'white' }}></div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       <Footer />
 

@@ -37,7 +37,8 @@ const ContactDetail = memo(({ info, colors }) => (
 
 const SocialLink = memo(({ social }) => (
   <a 
-    href="#" 
+    href={social.link}
+    target='_blank'
     className="group relative w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 
               hover:scale-110 hover:-translate-y-1 active:scale-95"
     style={{ 
@@ -94,15 +95,15 @@ const Footer = () => {
   ], []);
 
   const socialLinks = useMemo(() => [
-    { icon: Facebook, label: 'Facebook', color: '#1877F2' },
-    { icon: Twitter, label: 'Twitter', color: '#1DA1F2' },
-    { icon: Instagram, label: 'Instagram', color: '#E4405F' },
-    { icon: Linkedin, label: 'LinkedIn', color: '#0A66C2' },
-    { icon: Globe, label: 'Website', color: colors.primary },
+    { icon: Facebook, link: 'https://www.facebook.com/DigiCodersTech/', label: 'Facebook', color: '#1877F2' },
+    { icon: Twitter, label: 'Twitter', link:'https://x.com/DigiCodersTech/', color: '#1DA1F2' },
+    { icon: Instagram, label: 'Instagram',link:'https://www.instagram.com/digicoderstech/', color: '#E4405F' },
+    { icon: Linkedin, label: 'LinkedIn',link:'https://www.linkedin.com/company/digicoders/', color: '#0A66C2' },
+    { icon: Globe, label: 'Website',link:'https://digicoders.in', color: colors.primary },
   ], [colors.primary]);
 
   return (
-    <footer className="relative overflow-hidden" style={{ backgroundColor: colors.white }}>
+    <footer className="relative overflow-hidden bg-zinc-100">
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div className="absolute -top-20 -left-20 w-64 h-64 rounded-full opacity-5 blur-3xl"
           style={{ backgroundColor: colors.primary }}

@@ -120,7 +120,7 @@ const SubscriptionPlanCard = memo(({ plan, colors }) => (
         ))}
       </ul>
       
-      <NavLink 
+      {/* <NavLink 
         to="/subscribe"
         className="block w-full py-2.5 rounded-lg font-semibold text-sm text-center transition-all duration-300 
                  hover:scale-105 hover:shadow-lg active:scale-95"
@@ -130,7 +130,7 @@ const SubscriptionPlanCard = memo(({ plan, colors }) => (
         }}
       >
         {plan.popular ? 'Get Started' : 'Choose Plan'}
-      </NavLink>
+      </NavLink> */}
     </div>
   </div>
 ));
@@ -305,7 +305,8 @@ const AboutApp = () => {
               <br />
               <span 
                 className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"
-                style={{ backgroundImage: `linear-gradient(135deg, ${colors.primary}, ${colors.secondary})` }}
+                // style={{ backgroundImage: `linear-gradient(135deg, ${colors.primary}, ${colors.secondary})` }}
+                style={{ color: colors.primary }}
               >
                 Coders App
               </span>
@@ -352,7 +353,8 @@ const AboutApp = () => {
               className="group inline-flex items-center gap-3 px-6 py-3 rounded-xl font-semibold 
                        transition-all duration-300 hover:scale-105 hover:shadow-xl active:scale-95"
               style={{ 
-                background: `linear-gradient(135deg, ${colors.primary}, ${colors.secondary})`,
+                // background: `linear-gradient(135deg, ${colors.primary}, ${colors.secondary})`,
+                background:colors.primary,
                 color: colors.white
               }}
             >
@@ -370,7 +372,7 @@ const AboutApp = () => {
               }}
             >
               <div className="relative mx-auto max-w-sm lg:max-w-md">
-                <div className="relative overflow-hidden rounded-2xl shadow-xl">
+                <div className="relative overflow-hidden rounded-2xl ">
                   <Lottie 
                     animationData={softwareAnimation}
                     loop={true}

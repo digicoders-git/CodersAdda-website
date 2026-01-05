@@ -227,11 +227,12 @@ const CourseCard = memo(({ course, colors }) => (
             <span className="text-sm font-semibold" style={{ color: colors.textPrimary }}>{course.author}</span>
           </div>
         </div>
-        {/* <button className="p-2 rounded-full transition-all hover:scale-110"
-          style={{ backgroundColor: `${colors.primary}10` }}
+        <button className="rounded-full transition-all hover:scale-110"
+          
         >
-          <Play size={16} style={{ color: colors.primary }} />
-        </button> */}
+          {/* <Play size={16} style={{ color: colors.primary }} /> */}
+           <NavLink to='/cat-details' className="font-semibold p-1 rounded" style={{ color: colors.white, backgroundColor: colors.primary }}>View Details</NavLink>
+        </button>
       </div>
     </div>
   </div>
@@ -239,7 +240,7 @@ const CourseCard = memo(({ course, colors }) => (
 
 const CategoryCard = memo(({ cat, colors }) => (
   <div 
-    className="group relative p-8 rounded-3xl transition-all duration-500 hover:scale-105 hover:shadow-2xl cursor-pointer will-change-transform"
+    className="group shadow relative p-8 rounded-3xl transition-all duration-500 hover:scale-105 hover:shadow-2xl cursor-pointer will-change-transform"
     style={{ 
       backgroundColor: 'rgba(255, 255, 255, 0.9)',
       backdropFilter: 'blur(10px)',
@@ -260,14 +261,15 @@ const CategoryCard = memo(({ cat, colors }) => (
     
     <h3 className="text-xl font-bold mb-3" style={{ color: colors.textPrimary }}>{cat.title}</h3>
     <p className="text-sm leading-relaxed mb-6 opacity-80" style={{ color: colors.textSecondary }}>{cat.desc}</p>
-{/*     
+    
     <div className="flex items-center justify-between pt-6 border-t" style={{ borderColor: `${colors.border}30` }}>
       <div className="flex items-center gap-2 text-sm">
-        <Users size={16} className="opacity-60" />
-        <span className="font-semibold" style={{ color: colors.textPrimary }}>{cat.students}</span>
-        <span className="opacity-60" style={{ color: colors.textSecondary }}>students</span>
+        {/* <Users size={16} className="opacity-60" /> */}
+        {/* <span className="font-semibold" style={{ color: colors.textPrimary }}>{cat.students}</span> */}
+        <NavLink to='/cat-details' className="font-semibold p-2 rounded transition-all hover:scale-110" style={{ color: colors.white, backgroundColor: colors.primary }}>View Details</NavLink>
+        {/* <span className="opacity-60" style={{ color: colors.textSecondary }}>students</span> */}
       </div>
-    </div> */}
+    </div>
   </div>
 ));
 

@@ -7,7 +7,7 @@ import { NavLink } from 'react-router-dom';
 
 const StatsCard = memo(({ stat, idx, colors }) => (
   <div 
-    className="group relative p-6 lg:p-8 rounded-2xl lg:rounded-3xl transition-all duration-500 hover:scale-105 hover:shadow-2xl cursor-pointer"
+    className="group shadow relative p-6 lg:p-8 rounded-2xl lg:rounded-3xl transition-all duration-500 hover:scale-105 hover:shadow-2xl cursor-pointer"
     style={{ 
       backgroundColor: 'rgba(255, 255, 255, 0.8)',
       backdropFilter: 'blur(10px)',
